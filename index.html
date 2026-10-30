@@ -5,249 +5,347 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>浙BA 2026 城市篮球争霸赛 · 数据看板</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin:0; padding:0; box-sizing:border-box; }
 
-  :root {
-    --orange: #E8590C;
-    --orange-light: #FFF0E6;
-    --navy: #1E3A5F;
-    --bg: #F5F6F8;
-    --card: #FFFFFF;
-    --text: #1A1A1A;
-    --text-2: #6B7280;
-    --border: #E5E7EB;
-    --green: #2F9E44;
-    --red: #E03131;
-    --blue: #1971C2;
-  }
+body {
+  background:#0a0e17; color:#e0e0e0;
+  font-family:'Segoe UI', system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  min-height:100vh; overflow-x:hidden;
+}
 
-  body {
-    font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-  }
+#bg-grid {
+  position:fixed; inset:-50%; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,212,255,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168,85,247,.045) 1px, transparent 1px);
+  background-size:52px 52px;
+  animation:gridDrift 26s linear infinite;
+}
+@keyframes gridDrift { to { transform:translate(52px,52px); } }
 
-  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px 60px; }
+#bg-glow-a, #bg-glow-b {
+  position:fixed; z-index:0; pointer-events:none; border-radius:50%;
+}
+#bg-glow-a {
+  width:820px; height:820px; top:-340px; left:-200px;
+  background:radial-gradient(circle, rgba(0,212,255,.15), transparent 62%);
+  filter:blur(26px);
+}
+#bg-glow-b {
+  width:660px; height:660px; right:-240px; top:420px;
+  background:radial-gradient(circle, rgba(168,85,247,.13), transparent 62%);
+  filter:blur(26px);
+}
 
-  header {
-    background: linear-gradient(135deg, #1E3A5F 0%, #2C5282 100%);
-    color: #fff;
-    padding: 34px 0 28px;
-    margin-bottom: 26px;
-  }
-  header .wrap { padding-bottom: 0; }
+.container { position:relative; z-index:1; max-width:1400px; margin:0 auto; padding:20px; }
 
-  .hd-top { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-  .logo-mark {
-    width: 34px; height: 34px; border-radius: 50%;
-    background: var(--orange); flex: none;
-    position: relative; align-self: center;
-  }
-  .logo-mark::before, .logo-mark::after {
-    content: ""; position: absolute; background: #fff;
-  }
-  .logo-mark::before { left: 50%; top: 3px; bottom: 3px; width: 1.5px; transform: translateX(-50%); }
-  .logo-mark::after { top: 50%; left: 3px; right: 3px; height: 1.5px; transform: translateY(-50%); }
+.header { text-align:center; padding:70px 20px 50px; }
 
-  h1 { font-size: 25px; font-weight: 600; letter-spacing: -.3px; }
-  .season-tag {
-    font-size: 12px; padding: 3px 9px; border-radius: 20px;
-    background: rgba(255,255,255,.16); font-weight: 400;
-  }
-  .hd-sub { font-size: 13px; opacity: .8; margin-top: 5px; }
+.header h1 {
+  font-size:4.2rem; font-weight:900; font-style:italic; letter-spacing:.04em;
+  background:linear-gradient(90deg,#00d4ff 0%,#a855f7 35%,#f59e0b 65%,#00d4ff 100%);
+  background-size:300% 100%;
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  animation:titleSweep 5s ease-in-out infinite;
+  filter:drop-shadow(0 0 28px rgba(0,212,255,.35));
+  position:relative; display:inline-block;
+}
+@keyframes titleSweep { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 
-  .hd-bar {
-    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-    margin-top: 18px; padding-top: 16px;
-    border-top: 1px solid rgba(255,255,255,.14);
-    font-size: 12.5px;
-  }
-  .dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: #51CF66; display: inline-block; margin-right: 6px;
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
-  .hd-bar .spacer { flex: 1; }
+.header h1::after {
+  content:''; position:absolute; left:50%; transform:translateX(-50%); bottom:-14px;
+  width:180px; height:3px; border-radius:2px;
+  background:linear-gradient(90deg,transparent,#00d4ff,#a855f7,#f59e0b,transparent);
+  animation:lineGlow 3s ease-in-out infinite;
+}
+@keyframes lineGlow {
+  0%,100%{box-shadow:0 0 10px rgba(0,212,255,.4); width:180px}
+  50%{box-shadow:0 0 30px rgba(168,85,247,.7),0 0 60px rgba(0,212,255,.3); width:260px}
+}
 
-  button {
-    font-family: inherit; font-size: 12.5px; cursor: pointer;
-    border-radius: 7px; border: 1px solid rgba(255,255,255,.28);
-    background: rgba(255,255,255,.12); color: #fff;
-    padding: 6px 13px; transition: background .15s;
-  }
-  button:hover { background: rgba(255,255,255,.22); }
-  button:disabled { opacity: .5; cursor: default; }
+.header .subtitle {
+  color:#a0aec0; margin-top:30px; font-size:1.1rem;
+  font-style:italic; letter-spacing:.12em; font-weight:400; opacity:.85;
+}
 
-  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
-  .kpi {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 11px; padding: 17px 18px;
-  }
-  .kpi .k-label { font-size: 12px; color: var(--text-2); }
-  .kpi .k-val { font-size: 27px; font-weight: 600; margin-top: 3px; letter-spacing: -.5px; }
-  .kpi .k-val small { font-size: 13px; font-weight: 400; color: var(--text-2); margin-left: 3px; }
-  .kpi.accent .k-val { color: var(--orange); }
+.badge-row { display:flex; justify-content:center; gap:12px; margin-top:22px; flex-wrap:wrap; }
+.badge {
+  display:inline-flex; align-items:center; gap:7px;
+  padding:7px 18px; border-radius:20px;
+  font-size:.8rem; font-weight:600; font-style:italic; letter-spacing:.04em;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.04); color:#8892a4;
+  backdrop-filter:blur(6px); transition:all .3s;
+}
+.badge:hover {
+  border-color:rgba(0,212,255,.4); color:#00d4ff;
+  box-shadow:0 0 20px rgba(0,212,255,.15);
+}
+.badge.dot::before {
+  content:''; width:7px; height:7px; border-radius:50%;
+  background:#22c55e; box-shadow:0 0 10px #22c55e;
+  animation:badgePulse 2s ease-in-out infinite;
+}
+@keyframes badgePulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
-  .card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 11px; padding: 20px 22px; margin-bottom: 22px;
-  }
-  .card h2 {
-    font-size: 15px; font-weight: 600; margin-bottom: 15px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .card h2::before {
-    content: ""; width: 3px; height: 14px;
-    background: var(--orange); border-radius: 2px;
-  }
+.section-title {
+  font-size:1.9rem; font-weight:900; font-style:italic;
+  margin:64px 0 32px; padding:0 0 18px 0;
+  position:relative; display:inline-block; letter-spacing:.05em; cursor:default;
+}
+.section-title span {
+  background:linear-gradient(90deg,#00d4ff 0%,#a855f7 40%,#f59e0b 80%,#00d4ff 100%);
+  background-size:300% 100%;
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  animation:titleGlow 3s ease-in-out infinite;
+}
+@keyframes titleGlow { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+.section-title::after {
+  content:''; position:absolute; left:0; bottom:0;
+  width:70px; height:3px; border-radius:2px;
+  background:linear-gradient(90deg,#00d4ff,#a855f7,#f59e0b);
+  box-shadow:0 0 14px rgba(0,212,255,.5);
+  transition:width .7s cubic-bezier(.16,1,.3,1), box-shadow .7s, height .4s;
+}
+.section-title:hover::after { width:160px; height:4px; box-shadow:0 0 28px rgba(168,85,247,.7),0 0 60px rgba(0,212,255,.2); }
+.section-title::before {
+  content:''; position:absolute; left:-18px; top:50%; transform:translateY(-50%);
+  width:8px; height:32px; border-radius:4px;
+  background:linear-gradient(180deg,#00d4ff,#a855f7,#f59e0b);
+  box-shadow:0 0 14px rgba(0,212,255,.6);
+  animation:barPulse 2.5s ease-in-out infinite;
+  transition:height .5s cubic-bezier(.16,1,.3,1), box-shadow .5s, width .4s;
+}
+@keyframes barPulse { 0%,100%{opacity:.8} 50%{opacity:1; box-shadow:0 0 20px rgba(0,212,255,.8)} }
+.section-title:hover::before { height:40px; width:10px; }
 
-  .tabs { display: flex; gap: 7px; margin-bottom: 15px; flex-wrap: wrap; }
-  .tab {
-    padding: 6px 15px; border-radius: 7px; font-size: 13px; cursor: pointer;
-    border: 1px solid var(--border); background: #fff; color: var(--text-2);
-    transition: all .15s;
-  }
-  .tab:hover { border-color: var(--orange); color: var(--orange); }
-  .tab.on { background: var(--orange); border-color: var(--orange); color: #fff; }
+.stats-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(210px,1fr)); gap:20px; }
+.stat-card {
+  background:rgba(255,255,255,.03); border:1px solid rgba(0,212,255,.2);
+  border-radius:16px; padding:28px 20px; text-align:center;
+  backdrop-filter:blur(10px); transition:all .3s;
+}
+.stat-card:hover {
+  transform:translateY(-5px); border-color:#00d4ff;
+  box-shadow:0 10px 40px rgba(0,212,255,.2);
+}
+.stat-card .num {
+  font-size:3rem; font-weight:900;
+  background:linear-gradient(135deg,#00d4ff,#a855f7,#f59e0b);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  font-variant-numeric:tabular-nums;
+}
+.stat-card .num i { font-style:normal; font-size:1.1rem; }
+.stat-card .label { color:#8892a4; margin-top:6px; font-size:.92rem; font-style:italic; }
 
-  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
-  th {
-    text-align: left; font-weight: 500; color: var(--text-2);
-    font-size: 12px; padding: 8px 10px; border-bottom: 1px solid var(--border);
-  }
-  td { padding: 9px 10px; border-bottom: 1px solid #F1F2F4; }
-  tbody tr:hover { background: #FAFBFC; }
-  .num { font-variant-numeric: tabular-nums; }
-  .rank {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 21px; height: 21px; border-radius: 6px;
-    background: #F1F3F5; font-size: 11.5px; color: var(--text-2); font-weight: 500;
-  }
-  .rank.r1 { background: #FFF0E6; color: var(--orange); }
-  .rank.r2 { background: #EEF2F7; color: var(--navy); }
-  .rank.r3 { background: #FDF2E9; color: #B85C38; }
+.card {
+  background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08);
+  border-radius:20px; padding:24px; margin-bottom:26px;
+  backdrop-filter:blur(10px);
+}
 
-  .wl { font-variant-numeric: tabular-nums; color: var(--text-2); }
-  .wl b { color: var(--green); font-weight: 600; }
-  .wl i { color: var(--red); font-style: normal; }
-  .pts { font-weight: 600; color: var(--orange); font-variant-numeric: tabular-nums; }
+.tabs { display:flex; gap:9px; margin-bottom:18px; flex-wrap:wrap; }
+.tab {
+  padding:8px 20px; border-radius:12px; font-size:.88rem; font-weight:700;
+  font-style:italic; letter-spacing:.05em; cursor:pointer;
+  border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.03);
+  color:#8892a4; transition:all .25s;
+}
+.tab:hover { border-color:rgba(0,212,255,.45); color:#00d4ff; }
+.tab.on {
+  background:linear-gradient(135deg,#00d4ff,#a855f7);
+  border-color:transparent; color:#05080f; font-weight:900;
+  box-shadow:0 6px 24px rgba(0,212,255,.35);
+}
 
-  .bar { height: 5px; background: #F1F3F5; border-radius: 3px; overflow: hidden; min-width: 60px; }
-  .bar span { display: block; height: 100%; background: var(--orange); border-radius: 3px; transition: width .5s; }
+table { width:100%; border-collapse:collapse; font-size:.9rem; }
+th {
+  text-align:left; font-weight:700; font-style:italic; color:#00d4ff;
+  padding:10px 12px; border-bottom:1px solid rgba(0,212,255,.25);
+  font-size:.82rem; letter-spacing:.06em;
+}
+td { padding:11px 12px; border-bottom:1px solid rgba(255,255,255,.045); }
+tbody tr { transition:background .18s; }
+tbody tr:hover { background:rgba(0,212,255,.06); }
+tbody tr.q { background:rgba(34,197,94,.06); }
+tbody tr.q:hover { background:rgba(34,197,94,.1); }
 
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.rank {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:22px; height:22px; border-radius:7px;
+  background:rgba(255,255,255,.07); font-size:.78rem;
+  color:#8892a4; font-weight:800; font-style:italic;
+}
+.rank.r1 { background:linear-gradient(135deg,#00d4ff,#a855f7); color:#05080f; }
+.rank.r2 { background:rgba(0,212,255,.28); color:#00d4ff; }
+.rank.r3 { background:rgba(168,85,247,.28); color:#a855f7; }
 
-  .score-row {
-    display: flex; align-items: center; gap: 10px;
-    padding: 9px 0; border-bottom: 1px solid #F1F2F4; font-size: 13.5px;
-  }
-  .score-row:last-child { border-bottom: none; }
-  .sr-date { color: var(--text-2); font-size: 12px; width: 44px; flex: none; font-variant-numeric: tabular-nums; }
-  .sr-team { flex: 1; }
-  .sr-team.away { text-align: right; }
-  .sr-score {
-    font-weight: 600; font-variant-numeric: tabular-nums;
-    background: #F7F8FA; padding: 2px 10px; border-radius: 6px; min-width: 62px; text-align: center;
-  }
-  .sr-score.win { background: var(--orange-light); color: var(--orange); }
-  .tag {
-    font-size: 11px; color: var(--text-2); background: #F1F3F5;
-    padding: 1px 7px; border-radius: 5px; flex: none;
-  }
+.wl { font-variant-numeric:tabular-nums; color:#8892a4; }
+.wl b { color:#22c55e; font-weight:800; }
+.wl i { color:#ef4444; font-style:normal; }
+.pts { font-weight:900; color:#f59e0b; font-variant-numeric:tabular-nums; font-style:italic; }
 
-  .chart-box { position: relative; height: 340px; }
+.bar { height:6px; background:rgba(255,255,255,.07); border-radius:3px; overflow:hidden; min-width:56px; }
+.bar span { display:block; height:100%; border-radius:3px; width:0; transition:width .9s cubic-bezier(.22,1,.36,1); }
 
-  .panel {
-    background: #FFFBFA; border: 1px dashed #F0B27A;
-    border-radius: 11px; padding: 18px 20px; margin-bottom: 22px;
-    display: none;
-  }
-  .panel.show { display: block; }
-  .panel h3 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
-  .panel p { font-size: 12.5px; color: var(--text-2); margin-bottom: 12px; }
-  textarea {
-    width: 100%; min-height: 260px; font-family: ui-monospace, Consolas, monospace;
-    font-size: 12px; line-height: 1.55; padding: 12px 14px; resize: vertical;
-    border: 1px solid var(--border); border-radius: 8px; background: #fff; color: var(--text);
-  }
-  textarea:focus { outline: none; border-color: var(--orange); }
-  .row { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
-  input[type=password] {
-    flex: 1; min-width: 220px; font-family: ui-monospace, monospace; font-size: 12px;
-    padding: 8px 12px; border: 1px solid var(--border); border-radius: 7px; background: #fff; color: var(--text);
-  }
-  input[type=password]:focus { outline: none; border-color: var(--orange); }
-  .btn-solid { background: var(--orange); border-color: var(--orange); color: #fff; }
-  .btn-solid:hover { background: #D9480F; border-color: #D9480F; }
-  .btn-dark { background: var(--navy); border-color: var(--navy); color: #fff; }
-  .btn-dark:hover { background: #162C47; }
-  .msg { font-size: 12.5px; margin-top: 11px; display: none; }
-  .msg.ok { color: var(--green); }
-  .msg.err { color: var(--red); }
-  .msg.show { display: block; }
+.q-tag {
+  font-size:.68rem; font-style:italic; font-weight:700;
+  color:#22c55e; border:1px solid rgba(34,197,94,.4);
+  background:rgba(34,197,94,.1); padding:1px 7px; border-radius:6px; margin-left:8px;
+}
 
-  footer { text-align: center; font-size: 12px; color: var(--text-2); padding-top: 8px; }
+.hero {
+  position:relative; overflow:hidden;
+  background:linear-gradient(118deg, rgba(0,212,255,.12) 0%, rgba(168,85,247,.09) 50%, rgba(255,255,255,.02) 100%);
+  border:1px solid rgba(0,212,255,.25);
+  border-radius:20px; padding:30px 32px; margin-bottom:26px;
+}
+.hero::after {
+  content:''; position:absolute; right:-80px; top:-80px;
+  width:280px; height:280px; border-radius:50%;
+  background:radial-gradient(circle, rgba(0,212,255,.2), transparent 68%);
+  animation:breathe 4.5s ease-in-out infinite;
+}
+@keyframes breathe { 0%,100%{transform:scale(1);opacity:.85} 50%{transform:scale(1.16);opacity:1} }
 
-  @media (max-width: 860px) {
-    .kpis { grid-template-columns: repeat(2, 1fr); }
-    .grid2 { grid-template-columns: 1fr; }
-    h1 { font-size: 21px; }
-  }
+.hero-in { position:relative; z-index:1; display:flex; align-items:center; gap:26px; flex-wrap:wrap; }
+
+.nxt-tag { font-size:.72rem; letter-spacing:.22em; color:#00d4ff; font-weight:900; font-style:italic; margin-bottom:10px; }
+.nxt-match { font-size:2rem; font-weight:900; font-style:italic; letter-spacing:-.02em; }
+.nxt-match span { color:#f59e0b; margin:0 12px; font-size:1.3rem; }
+.nxt-meta { font-size:.84rem; color:#8892a4; margin-top:8px; }
+
+.cd { display:flex; gap:10px; margin-left:auto; }
+.cd-b {
+  min-width:66px; text-align:center; padding:12px 8px;
+  background:rgba(0,212,255,.08); border:1px solid rgba(0,212,255,.28);
+  border-radius:12px;
+}
+.cd-n { font-size:1.7rem; font-weight:900; color:#00d4ff; font-variant-numeric:tabular-nums; line-height:1.05; font-style:italic; }
+.cd-l { font-size:.68rem; color:#8892a4; margin-top:3px; letter-spacing:.1em; }
+
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:26px; }
+@media (max-width:1080px) { .grid2 { grid-template-columns:1fr; } }
+
+.hbc-row { display:flex; align-items:center; gap:11px; padding:6px 0; font-size:.86rem; }
+.hbc-lb {
+  width:82px; text-align:right; flex:none; color:#8892a4;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.hbc-tk { flex:1; height:18px; background:rgba(255,255,255,.05); border-radius:5px; overflow:hidden; min-width:36px; }
+.hbc-fl { height:100%; border-radius:5px; width:0; transition:width 1.05s cubic-bezier(.22,1,.36,1); }
+.hbc-vl {
+  width:58px; flex:none; text-align:right; font-weight:800;
+  color:#f59e0b; font-variant-numeric:tabular-nums; font-style:italic;
+}
+
+.rd { border-bottom:1px solid rgba(255,255,255,.06); padding:12px 0 4px; }
+.rd:last-child { border-bottom:none; }
+.rd-h { cursor:pointer; list-style:none; display:flex; align-items:center; gap:11px; font-size:.9rem; }
+.rd-h::-webkit-details-marker { display:none; }
+.rd-nm { font-weight:900; font-style:italic; color:#00d4ff; }
+.rd-ct { font-size:.75rem; color:#8892a4; }
+.rd-st { font-size:.66rem; padding:2px 8px; border-radius:6px; font-style:italic; font-weight:700; }
+.rd-st.live { background:rgba(255,68,68,.15); color:#ff4444; border:1px solid rgba(255,68,68,.35); }
+.rd-st.done { background:rgba(255,255,255,.05); color:#8892a4; border:1px solid rgba(255,255,255,.08); }
+.rd-st.wait { background:rgba(0,212,255,.12); color:#00d4ff; border:1px solid rgba(0,212,255,.3); }
+.rd-bd { padding-top:6px; padding-bottom:8px; }
+
+.m-row { display:flex; align-items:center; gap:11px; padding:10px 0; border-bottom:1px solid rgba(255,255,255,.04); font-size:.88rem; }
+.m-row:last-child { border-bottom:none; }
+.m-row.next { background:rgba(0,212,255,.1); border-radius:10px; padding-left:10px; padding-right:10px; }
+.m-date { color:#8892a4; font-size:.76rem; width:44px; flex:none; font-variant-numeric:tabular-nums; }
+.m-team { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.m-sc {
+  font-weight:900; font-variant-numeric:tabular-nums; font-style:italic;
+  background:rgba(255,255,255,.06); padding:3px 11px; border-radius:7px;
+  min-width:58px; text-align:center; flex:none;
+}
+.m-sc.win { background:rgba(255,122,47,.2); color:#f59e0b; }
+.m-tag { font-size:.68rem; color:#8892a4; background:rgba(255,255,255,.06); padding:1px 8px; border-radius:6px; flex:none; }
+.m-badge {
+  font-size:.66rem; font-style:italic; font-weight:800; padding:2px 9px; border-radius:7px; flex:none;
+  background:rgba(0,212,255,.18); color:#00d4ff; border:1px solid rgba(0,212,255,.4);
+}
+
+.empty { color:#8892a4; font-size:.85rem; }
+
+.hd-bar {
+  display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap;
+  margin-top:26px; font-size:.8rem; color:#8892a4;
+}
+.hd-bar button {
+  font-family:inherit; font-size:.78rem; cursor:pointer;
+  padding:7px 16px; border-radius:10px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.04); color:#8892a4;
+  transition:all .25s; font-style:italic; font-weight:600;
+}
+.hd-bar button:hover {
+  border-color:rgba(0,212,255,.45); color:#00d4ff;
+  box-shadow:0 0 18px rgba(0,212,255,.15);
+}
+.hd-bar button:disabled { opacity:.45; cursor:default; }
+
+footer { text-align:center; font-size:.75rem; color:#8892a4; padding:34px 0 8px; }
+
+@keyframes rise { from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:none} } }
+.card, .stat-card, .hero, .section-title { animation:rise .55s both; }
+.stat-card:nth-child(1){animation-delay:.05s}
+.stat-card:nth-child(2){animation-delay:.1s}
+.stat-card:nth-child(3){animation-delay:.15s}
+.stat-card:nth-child(4){animation-delay:.2s}
+
+@media (prefers-reduced-motion: reduce) { * { animation:none !important; } }
 </style>
 </head>
 <body>
+<div id="bg-grid"></div>
+<div id="bg-glow-a"></div>
+<div id="bg-glow-b"></div>
 
-<header>
-  <div class="wrap">
-    <div class="hd-top">
-      <span class="logo-mark"></span>
-      <h1>浙BA 2026 城市篮球争霸赛</h1>
-      <span class="season-tag" id="seasonTag">第二届</span>
+<div class="container">
+
+  <div class="header">
+    <h1>浙BA 2026</h1>
+    <div class="subtitle" id="hdSub">浙江省城市篮球联赛 · 省级争霸赛</div>
+    <div class="badge-row">
+      <span class="badge" id="seasonTag">第二届</span>
+      <span class="badge" id="kpiTeams">28 支球队</span>
+      <span class="badge" id="kpiRounds">14 轮 168 场</span>
+      <span class="badge dot" id="syncText">数据同步中</span>
     </div>
-    <div class="hd-sub" id="hdSub">2026 浙江省城市篮球联赛 · 省级争霸赛</div>
     <div class="hd-bar">
-      <span><span class="dot"></span><span id="syncText">正在同步数据</span></span>
-      <span class="spacer"></span>
       <span id="updatedText">最后更新：--</span>
       <button id="refreshBtn">立即刷新</button>
       <button id="autoBtn">自动刷新：开</button>
-      <button id="editBtn">编辑数据</button>
     </div>
   </div>
-</header>
 
-<div class="wrap">
-
-  <div class="panel" id="editPanel">
-    <h3>编辑赛事数据</h3>
-    <p>直接改下面的 JSON，改完点「保存到 GitHub」，页面会自动刷新。Token 只存在你这台电脑上，不会上传给任何第三方。</p>
-    <textarea id="dataBox" spellcheck="false"></textarea>
-    <div class="row">
-      <input type="password" id="tokenBox" placeholder="粘贴 GitHub Token（仅勾选 repo 权限的 classic token）">
-      <button class="btn-solid" id="saveBtn">保存到 GitHub</button>
-      <button class="btn-dark" id="downloadBtn">下载 data.json</button>
-      <button id="cancelBtn">收起</button>
+  <div class="hero">
+    <div class="hero-in">
+      <div>
+        <div class="nxt-tag" id="nxtTag">NEXT MATCH</div>
+        <div class="nxt-match" id="nxtMatch">加载中</div>
+        <div class="nxt-meta" id="nxtMeta"></div>
+      </div>
+      <div class="cd" id="cdBox">
+        <div class="cd-b"><div class="cd-n" id="cdD">--</div><div class="cd-l">天</div></div>
+        <div class="cd-b"><div class="cd-n" id="cdH">--</div><div class="cd-l">时</div></div>
+        <div class="cd-b"><div class="cd-n" id="cdM">--</div><div class="cd-l">分</div></div>
+        <div class="cd-b"><div class="cd-n" id="cdS">--</div><div class="cd-l">秒</div></div>
+      </div>
     </div>
-    <div class="msg" id="msgBox"></div>
   </div>
 
-  <div class="kpis" id="kpis"></div>
+  <div class="stats-grid" id="kpis"></div>
 
   <div class="card">
-    <h2>小组积分榜</h2>
+    <div class="section-title" style="margin:0 0 26px"><span>小组积分榜</span></div>
     <div class="tabs" id="groupTabs"></div>
     <table>
       <thead>
-        <tr>
-          <th style="width:52px">排名</th>
-          <th>队伍</th>
-          <th style="width:92px">胜 - 负</th>
-          <th style="width:60px">积分</th>
-          <th style="width:110px">胜率</th>
-        </tr>
+        <tr><th style="width:54px">排名</th><th>队伍</th><th style="width:94px">胜 - 负</th><th style="width:62px">积分</th><th style="width:116px">胜率</th></tr>
       </thead>
       <tbody id="groupBody"></tbody>
     </table>
@@ -255,46 +353,45 @@
 
   <div class="grid2">
     <div class="card">
-      <h2>球员得分榜 TOP 10</h2>
-      <div class="chart-box"><canvas id="playerChart"></canvas></div>
+      <div class="section-title" style="margin:0 0 22px"><span>球员得分榜</span></div>
+      <div id="playerChart"></div>
     </div>
     <div class="card">
-      <h2>球队胜率排行</h2>
-      <div class="chart-box"><canvas id="teamChart"></canvas></div>
+      <div class="section-title" style="margin:0 0 22px"><span>球队胜率排行</span></div>
+      <div id="teamChart"></div>
     </div>
   </div>
 
   <div class="grid2">
     <div class="card">
-      <h2>近期赛果</h2>
+      <div class="section-title" style="margin:0 0 22px"><span>近期赛果</span></div>
       <div id="resultsBox"></div>
     </div>
     <div class="card">
-      <h2>后续赛程</h2>
-      <div id="scheduleBox"></div>
+      <div class="section-title" style="margin:0 0 22px"><span>即将开赛</span></div>
+      <div id="upcomingBox"></div>
     </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title" style="margin:0 0 24px"><span>完整赛程</span></div>
+    <div id="scheduleBox"></div>
   </div>
 
   <footer id="footerNote"></footer>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
-const CONFIG = {
-  owner: 'Tangyikangok',
-  repo: 'Tangyikangok.github.io',
-  branch: 'main',
-  dataPath: 'data.json'
-};
+const CONFIG = { dataPath: 'data.json' };
 
 const FALLBACK = {
   meta: {
     title: '浙BA 2026 城市篮球争霸赛',
-    subtitle: '2026 浙江省城市篮球联赛 · 省级争霸赛',
+    subtitle: '浙江省城市篮球联赛 · 省级争霸赛',
     season: '第二届',
     updatedAt: '2026-10-26 20:00',
     source: '浙江省篮协大数据平台',
-    note: '当前展示的是内置示例数据，请在仓库根目录放置 data.json 后刷新'
+    note: '当前为内置示例数据，把 data.json 放到仓库根目录后刷新即可'
   },
   groups: [
     { name: 'A组', teams: [
@@ -349,14 +446,10 @@ const FALLBACK = {
   results: [
     { date: '10-25', home: '衢州队', away: '玉环队', hs: 78, as: 68, group: 'C组' },
     { date: '10-25', home: '绍兴队', away: '临安队', hs: 75, as: 63, group: 'B组' },
-    { date: '10-21', home: '湖州队', away: '宁波队', hs: 88, as: 84, group: 'D组' }
+    { date: '10-24', home: '永康队', away: '临海队', hs: 88, as: 71, group: 'B组' }
   ],
   schedule: [
-    { date: '10-30', time: '19:30', home: '金华队', away: '海宁队', group: 'C组' },
-    { date: '10-30', time: '19:30', home: '诸暨队', away: '温州队', group: 'C组' },
-    { date: '10-31', time: '19:30', home: '湖州队', away: '义乌队', group: 'D组' },
-    { date: '10-31', time: '19:30', home: '云和队', away: '嘉兴队', group: 'D组' },
-    { date: '11-01', time: '19:30', home: '苍南队', away: '富阳队', group: 'D组' }
+    { no: 92, round: '第8轮', date: '10-30', time: '19:30', home: '金华队', away: '海宁队', group: 'C组', hs: null, as: null }
   ]
 };
 
@@ -364,23 +457,34 @@ let appData = null;
 let usingFallback = false;
 let currentGroup = 0;
 let timer = null;
+let cdTimer = null;
 let autoOn = true;
-let playerChart = null;
-let teamChart = null;
+let nextMatch = null;
 
 const $ = id => document.getElementById(id);
+
+const GC = { 'A组': '#00d4ff', 'B组': '#a855f7', 'C组': '#22c55e', 'D组': '#f59e0b' };
 
 function esc(s) {
   return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 }
 
+function parseMatch(m) {
+  const [mo, d] = m.date.split('-').map(Number);
+  const [h, mi] = (m.time || '19:30').split(':').map(Number);
+  const now = new Date();
+  let year = now.getFullYear();
+  const probe = new Date(year, mo - 1, d, h, mi);
+  if (probe.getTime() < now.getTime() - 6 * 30 * 864e5) year += 1;
+  return new Date(year, mo - 1, d, h, mi);
+}
+
 async function load(silent) {
   const btn = $('refreshBtn');
-  if (!silent) { btn.disabled = true; btn.textContent = '刷新中'; $('syncText').textContent = '正在同步数据'; }
+  if (!silent) { btn.disabled = true; btn.textContent = '刷新中'; $('syncText').textContent = '数据同步中'; }
 
   try {
-    const url = `${CONFIG.dataPath}?t=${Date.now()}`;
-    const res = await fetch(url, { cache: 'no-store' });
+    const res = await fetch(`${CONFIG.dataPath}?t=${Date.now()}`, { cache: 'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     appData = await res.json();
     usingFallback = false;
@@ -391,7 +495,7 @@ async function load(silent) {
 
   render();
   if (!silent) { btn.disabled = false; btn.textContent = '立即刷新'; }
-  $('syncText').textContent = usingFallback ? '使用内置示例数据' : '数据已同步';
+  $('syncText').textContent = usingFallback ? '内置示例数据' : '数据已同步';
 }
 
 function render() {
@@ -400,6 +504,7 @@ function render() {
   renderTabs();
   renderGroup();
   renderResults();
+  renderUpcoming();
   renderSchedule();
   renderCharts();
 }
@@ -416,32 +521,53 @@ function winRate(t) {
 function renderMeta() {
   const m = appData.meta || {};
   document.title = m.title || '浙BA 数据看板';
-  $('seasonTag').textContent = m.season || '';
   $('hdSub').textContent = m.subtitle || '';
+  $('seasonTag').textContent = m.season || '';
   $('updatedText').textContent = '最后更新：' + (m.updatedAt || '--');
   $('footerNote').textContent = (m.source ? '数据来源：' + m.source + '　' : '') + (m.note || '');
 }
 
+function countUp(el, target, dur) {
+  const start = performance.now();
+  function step(t) {
+    const p = Math.min((t - start) / dur, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(target * e);
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
 function renderKPI() {
   const teams = allTeams();
-  const total = teams.length;
-  const played = teams.reduce((s, t) => s + (t.w || 0) + (t.l || 0), 0) / 2;
-  const topScorer = (appData.players || [])[0];
-  const undefeated = teams.filter(t => (t.l || 0) === 0 && (t.w || 0) > 0);
+  const played = Math.round(teams.reduce((s, t) => s + (t.w || 0) + (t.l || 0), 0) / 2);
+  const top = (appData.players || [])[0];
+
+  $('kpiTeams').textContent = teams.length + ' 支球队';
+  $('kpiRounds').textContent = played + ' 场已完赛';
 
   const cards = [
-    { label: '参赛队伍', val: total, unit: '支' },
-    { label: '已赛场次', val: Math.round(played), unit: '场' },
-    { label: '得分王', val: topScorer ? topScorer.pts : '--', unit: topScorer ? '分 · ' + topScorer.name : '', accent: true },
-    { label: '不败球队', val: undefeated.length, unit:undefeated.length ? '支 · ' + undefeated.map(t => t.team.replace('队','')).join('、') : '支' }
+    { label: '参赛队伍', val: teams.length, unit: '支' },
+    { label: '已完赛', val: played, unit: '场' },
+    { label: '得分王', val: top ? top.pts : 0, unit: top ? '分 · ' + top.name : '' },
+    { label: '小组头名', val: (appData.groups || []).length, unit: '组' }
   ];
 
-  $('kpis').innerHTML = cards.map(c => `
-    <div class="kpi${c.accent ? ' accent' : ''}">
-      <div class="k-label">${esc(c.label)}</div>
-      <div class="k-val">${esc(c.val)}<small>${esc(c.unit || '')}</small></div>
+  const box = $('kpis');
+  box.innerHTML = cards.map(c => `
+    <div class="stat-card">
+      <div class="num" data-v="${esc(c.val)}">0<i>${esc(c.unit || '')}</i></div>
+      <div class="label">${esc(c.label)}</div>
     </div>
   `).join('');
+
+  box.querySelectorAll('.num').forEach(el => {
+    const target = +el.dataset.v;
+    const unit = el.querySelector('i');
+    const keep = unit ? unit.outerHTML : '';
+    countUp(el, target, 900);
+    setTimeout(() => { if (unit) el.innerHTML = target + keep; }, 950);
+  });
 }
 
 function renderTabs() {
@@ -450,11 +576,7 @@ function renderTabs() {
   ).join('');
 
   $('groupTabs').querySelectorAll('.tab').forEach(el => {
-    el.onclick = () => {
-      currentGroup = +el.dataset.i;
-      renderTabs();
-      renderGroup();
-    };
+    el.onclick = () => { currentGroup = +el.dataset.i; renderTabs(); renderGroup(); };
   });
 }
 
@@ -462,237 +584,189 @@ function renderGroup() {
   const g = (appData.groups || [])[currentGroup];
   if (!g) return;
 
+  const color = GC[g.name] || '#00d4ff';
+
   $('groupBody').innerHTML = (g.teams || []).map(t => {
     const wr = winRate(t);
     const rc = t.rank <= 3 ? ' r' + t.rank : '';
+    const q = t.rank <= 4;
     return `
-      <tr>
+      <tr class="${q ? 'q' : ''}">
         <td><span class="rank${rc}">${t.rank}</span></td>
-        <td>${esc(t.team)}</td>
+        <td>${esc(t.team)}${q ? '<span class="q-tag">晋级区</span>' : ''}</td>
         <td class="wl"><b>${t.w}</b> - <i>${t.l}</i></td>
         <td class="pts num">${t.pts}</td>
-        <td><div class="bar"><span style="width:${wr.toFixed(0)}%"></span></div></td>
+        <td><div class="bar"><span data-w="${wr.toFixed(0)}" style="background:linear-gradient(90deg,${color},${color}88)"></span></div></td>
       </tr>
     `;
   }).join('');
+
+  requestAnimationFrame(() => {
+    $('groupBody').querySelectorAll('.bar span').forEach(s => { s.style.width = s.dataset.w + '%'; });
+  });
+}
+
+function roundNum(r) {
+  return parseInt(String(r).replace(/\D/g, ''), 10) || 0;
+}
+
+function matchRow(m, showDate) {
+  const has = m.hs !== null && m.as !== null && m.hs !== undefined;
+  const hw = has && m.hs > m.as;
+  return `
+    <div class="m-row">
+      ${showDate ? `<span class="m-date">${esc(m.date)}</span>` : ''}
+      <span class="m-team" style="text-align:right">${esc(m.home)}</span>
+      <span class="m-sc${hw ? ' win' : ''}">${has ? m.hs + ' : ' + m.as : esc(m.time)}</span>
+      <span class="m-team">${esc(m.away)}</span>
+      <span class="m-tag">${esc(m.group || '')}</span>
+    </div>
+  `;
 }
 
 function renderResults() {
-  const list = appData.results || [];
-  if (!list.length) {
-    $('resultsBox').innerHTML = '<p style="color:#6B7280;font-size:13px">暂无数据</p>';
+  const list = (appData.results || []).slice(0, 8);
+  $('resultsBox').innerHTML = list.length
+    ? list.map(m => matchRow(m, true)).join('')
+    : '<p class="empty">暂无数据</p>';
+}
+
+function renderUpcoming() {
+  const now = new Date();
+  const list = (appData.schedule || [])
+    .map(m => ({ ...m, _t: parseMatch(m) }))
+    .filter(m => m._t.getTime() > now.getTime())
+    .sort((a, b) => a._t - b._t)
+    .slice(0, 8);
+
+  nextMatch = list[0] || null;
+  renderCountdown();
+
+  $('upcomingBox').innerHTML = list.length
+    ? list.map((m, i) => `
+        <div class="m-row${i === 0 ? ' next' : ''}">
+          <span class="m-date">${esc(m.date)}</span>
+          <span class="m-team" style="text-align:right">${esc(m.home)}</span>
+          <span class="m-sc">${esc(m.time)}</span>
+          <span class="m-team">${esc(m.away)}</span>
+          ${i === 0 ? '<span class="m-badge">下一场</span>' : `<span class="m-tag">${esc(m.group)}</span>`}
+        </div>
+      `).join('')
+    : '<p class="empty">暂无待赛程</p>';
+}
+
+function renderCountdown() {
+  const m = nextMatch;
+  if (!m) {
+    $('nxtTag').textContent = 'SEASON 2026';
+    $('nxtMatch').textContent = '赛程已结束';
+    $('nxtMeta').textContent = '';
+    ['cdD', 'cdH', 'cdM', 'cdS'].forEach(id => $(id).textContent = '--');
     return;
   }
 
-  $('resultsBox').innerHTML = list.map(m => {
-    const has = m.hs > 0 || m.as > 0;
-    const hw = m.hs > m.as;
+  $('nxtTag').textContent = `NEXT MATCH · ${esc(m.round)}`;
+  $('nxtMatch').innerHTML = `${esc(m.home)}<span>VS</span>${esc(m.away)}`;
+  $('nxtMeta').textContent = `${m.date} ${m.time} · ${m.group} · 第 ${m.no} 场`;
+
+  clearInterval(cdTimer);
+  function tick() {
+    const diff = parseMatch(m).getTime() - Date.now();
+    if (diff <= 0) {
+      ['cdD', 'cdH', 'cdM', 'cdS'].forEach(id => $(id).textContent = '00');
+      clearInterval(cdTimer);
+      return;
+    }
+    const s = Math.floor(diff / 1000);
+    $('cdD').textContent = String(Math.floor(s / 86400)).padStart(2, '0');
+    $('cdH').textContent = String(Math.floor(s % 86400 / 3600)).padStart(2, '0');
+    $('cdM').textContent = String(Math.floor(s % 3600 / 60)).padStart(2, '0');
+    $('cdS').textContent = String(s % 60).padStart(2, '0');
+  }
+  tick();
+  cdTimer = setInterval(tick, 1000);
+}
+
+function renderSchedule() {
+  const now = new Date();
+  const all = (appData.schedule || [])
+    .map(m => ({ ...m, _t: parseMatch(m) }))
+    .sort((a, b) => a._t - b._t);
+
+  const byRound = {};
+  all.forEach(m => { (byRound[m.round] = byRound[m.round] || []).push(m); });
+
+  const rounds = Object.keys(byRound).sort((a, b) => roundNum(a) - roundNum(b));
+  if (!rounds.length) {
+    $('scheduleBox').innerHTML = '<p class="empty">暂无数据</p>';
+    return;
+  }
+
+  $('scheduleBox').innerHTML = rounds.map((r, ri) => {
+    const list = byRound[r];
+    const upcoming = list.filter(m => m._t.getTime() > now.getTime());
+    const status = upcoming.length === list.length ? 'wait' : (upcoming.length === 0 ? 'done' : 'live');
+    const label = status === 'wait' ? '未开始' : (status === 'done' ? '已结束' : '进行中');
+    const open = ri === 0 || status === 'live';
     return `
-      <div class="score-row">
-        <span class="sr-date">${esc(m.date)}</span>
-        <span class="sr-team">${esc(m.home)}</span>
-        <span class="sr-score${has && hw ? ' win' : ''}">${has ? m.hs + ' : ' + m.as : '未开赛'}</span>
-        <span class="sr-team away">${esc(m.away)}</span>
-      </div>
+      <details class="rd" ${open ? 'open' : ''}>
+        <summary class="rd-h">
+          <span class="rd-nm">${esc(r)}</span>
+          <span class="rd-ct">${list.length} 场</span>
+          <span class="rd-st ${status}">${label}</span>
+        </summary>
+        <div class="rd-bd">${list.map(m => matchRow(m, false)).join('')}</div>
+      </details>
     `;
   }).join('');
 }
 
-function renderSchedule() {
-  const list = appData.schedule || [];
-  if (!list.length) {
-    $('scheduleBox').innerHTML = '<p style="color:#6B7280;font-size:13px">暂无数据</p>';
-    return;
-  }
-
-  $('scheduleBox').innerHTML = list.map(m => `
-    <div class="score-row">
-      <span class="sr-date">${esc(m.date)}</span>
-      <span class="sr-team">${esc(m.home)} vs ${esc(m.away)}</span>
-      <span class="tag">${esc(m.group || '')}</span>
-      <span class="sr-date" style="width:auto">${esc(m.time || '')}</span>
+function bar(boxId, items, suffix) {
+  const box = $(boxId);
+  if (!items.length) { box.innerHTML = '<p class="empty">暂无数据</p>'; return; }
+  const max = Math.max.apply(null, items.map(i => i.v)) || 1;
+  box.innerHTML = items.map(i => `
+    <div class="hbc-row">
+      <div class="hbc-lb" title="${esc(i.k)}">${esc(i.k)}</div>
+      <div class="hbc-tk">
+        <div class="hbc-fl" style="background:${i.c};width:0" data-w="${(i.v / max * 100).toFixed(1)}"></div>
+      </div>
+      <div class="hbc-vl">${esc(i.d)}<i>${esc(suffix || '')}</i></div>
     </div>
   `).join('');
+  requestAnimationFrame(() => {
+    box.querySelectorAll('.hbc-fl').forEach(f => { f.style.width = f.dataset.w + '%'; });
+  });
+}
+
+function renderPlayerChart() {
+  const items = (appData.players || []).slice(0, 10).map((p, i) => ({
+    k: p.name, v: p.pts, d: p.pts, c: i < 3 ? '#00d4ff' : 'rgba(0,212,255,.35)'
+  }));
+  bar('playerChart', items, '分');
+}
+
+function renderTeamChart() {
+  const items = allTeams()
+    .filter(t => (t.w || 0) + (t.l || 0) > 0)
+    .sort((a, b) => winRate(b) - winRate(a) || b.pts - a.pts)
+    .slice(0, 12)
+    .map(t => ({ k: t.team, v: +winRate(t).toFixed(1), d: +winRate(t).toFixed(1), c: GC[t.group] || '#00d4ff' }));
+  bar('teamChart', items, '%');
 }
 
 function renderCharts() {
-  if (typeof Chart === 'undefined') {
-    document.querySelectorAll('.chart-box').forEach(b => {
-      b.innerHTML = '<p style="color:#6B7280;font-size:13px;text-align:center;padding-top:60px">图表库加载失败，请检查网络</p>';
-    });
-    return;
-  }
-
-  Chart.defaults.font.family = 'system-ui, -apple-system, "PingFang SC", sans-serif';
-  Chart.defaults.color = '#6B7280';
-
-  const players = (appData.players || []).slice(0, 10);
-  if (playerChart) playerChart.destroy();
-  playerChart = new Chart($('playerChart'), {
-    type: 'bar',
-    data: {
-      labels: players.map(p => p.name),
-      datasets: [{
-        label: '总得分',
-        data: players.map(p => p.pts),
-        backgroundColor: '#E8590C',
-        borderRadius: 5,
-        barThickness: 15
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            afterLabel: ctx => players[ctx.dataIndex] ? players[ctx.dataIndex].team : ''
-          }
-        }
-      },
-      scales: {
-        x: { grid: { color: '#F1F3F5' }, beginAtZero: true },
-        y: { grid: { display: false } }
-      }
-    }
-  });
-
-  const top = allTeams()
-    .filter(t => (t.w || 0) + (t.l || 0) > 0)
-    .sort((a, b) => winRate(b) - winRate(a) || b.pts - a.pts)
-    .slice(0, 12);
-
-  if (teamChart) teamChart.destroy();
-  teamChart = new Chart($('teamChart'), {
-    type: 'bar',
-    data: {
-      labels: top.map(t => t.team),
-      datasets: [{
-        label: '胜率 %',
-        data: top.map(t => +winRate(t).toFixed(1)),
-        backgroundColor: top.map(t => {
-          if (t.group === 'A组') return '#E8590C';
-          if (t.group === 'B组') return '#1971C2';
-          if (t.group === 'C组') return '#2F9E44';
-          return '#9C36B5';
-        }),
-        borderRadius: 5,
-        barThickness: 15
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { afterLabel: ctx => top[ctx.dataIndex] ? top[ctx.dataIndex].group : '' } }
-      },
-      scales: {
-        x: { grid: { color: '#F1F3F5' }, beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } },
-        y: { grid: { display: false } }
-      }
-    }
-  });
-}
-
-function showMsg(text, ok) {
-  const box = $('msgBox');
-  box.textContent = text;
-  box.className = 'msg show ' + (ok ? 'ok' : 'err');
-}
-
-async function saveToGitHub() {
-  const token = $('tokenBox').value.trim();
-  if (!token) { showMsg('请先填写 GitHub Token', false); return; }
-
-  let parsed;
-  try { parsed = JSON.parse($('dataBox').value); }
-  catch (e) { showMsg('JSON 格式有误：' + e.message, false); return; }
-
-  const btn = $('saveBtn');
-  btn.disabled = true;
-  btn.textContent = '提交中';
-  showMsg('正在提交到 GitHub...', true);
-
-  const api = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.dataPath}`;
-  const headers = { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json' };
-
-  try {
-    let sha = null;
-    const get = await fetch(`${api}?ref=${CONFIG.branch}`, { headers });
-    if (get.ok) { sha = (await get.json()).sha; }
-
-    const content = btoa(String.fromCharCode(...new TextEncoder().encode(JSON.stringify(parsed, null, 2))));
-
-    const put = await fetch(api, {
-      method: 'PUT',
-      headers: { ...headers, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: `更新赛事数据 ${new Date().toLocaleString('zh-CN')}`,
-        content,
-        sha,
-        branch: CONFIG.branch
-      })
-    });
-
-    if (!put.ok) {
-      const err = await put.json().catch(() => ({}));
-      throw new Error(err.message || ('HTTP ' + put.status));
-    }
-
-    localStorage.setItem('gh_token', token);
-    showMsg('保存成功，页面正在刷新...', true);
-    setTimeout(() => load(false), 2500);
-  } catch (e) {
-    showMsg('保存失败：' + e.message, false);
-  } finally {
-    btn.disabled = false;
-    btn.textContent = '保存到 GitHub';
-  }
-}
-
-function downloadJSON() {
-  try { JSON.parse($('dataBox').value); }
-  catch (e) { showMsg('JSON 格式有误，无法下载：' + e.message, false); return; }
-
-  const blob = new Blob([$('dataBox').value], { type: 'application/json;charset=utf-8' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'data.json';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(a.href);
-  showMsg('已下载 data.json，把它拖回仓库根目录覆盖即可', true);
+  renderPlayerChart();
+  renderTeamChart();
 }
 
 $('refreshBtn').onclick = () => load(false);
-$('saveBtn').onclick = saveToGitHub;
-$('downloadBtn').onclick = downloadJSON;
-$('cancelBtn').onclick = () => $('editPanel').classList.remove('show');
-
-$('editBtn').onclick = () => {
-  const p = $('editPanel');
-  const willShow = !p.classList.contains('show');
-  p.classList.toggle('show', willShow);
-  if (willShow) {
-    $('dataBox').value = JSON.stringify(appData, null, 2);
-    $('tokenBox').value = localStorage.getItem('gh_token') || '';
-  }
-};
 
 $('autoBtn').onclick = () => {
   autoOn = !autoOn;
   $('autoBtn').textContent = '自动刷新：' + (autoOn ? '开' : '关');
-  if (autoOn) {
-    clearInterval(timer);
-    timer = setInterval(() => load(true), 60000);
-  } else {
-    clearInterval(timer);
-  }
+  if (!autoOn) clearInterval(timer);
+  else timer = setInterval(() => load(true), 60000);
 };
 
 timer = setInterval(() => { if (autoOn) load(true); }, 60000);
