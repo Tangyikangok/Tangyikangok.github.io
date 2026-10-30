@@ -1,34 +1,706 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>浙ba数据看板</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='10' y='10' width='80' height='80' fill='%23f5e0b3' stroke='%23333' stroke-width='3'/><path d='M10 10 v80 l80 -40 v-40 z' fill='none' stroke='%23333' stroke-width='3'/></svg>"> -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' width='50' height='50'><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='80'>🌐</text></svg>">
-    <!-- 引入 marked 库 -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> -->
-     <script src="marked.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>浙BA 2026 城市篮球争霸赛 · 数据看板</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --orange: #E8590C;
+    --orange-light: #FFF0E6;
+    --navy: #1E3A5F;
+    --bg: #F5F6F8;
+    --card: #FFFFFF;
+    --text: #1A1A1A;
+    --text-2: #6B7280;
+    --border: #E5E7EB;
+    --green: #2F9E44;
+    --red: #E03131;
+    --blue: #1971C2;
+  }
+
+  body {
+    font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px 60px; }
+
+  header {
+    background: linear-gradient(135deg, #1E3A5F 0%, #2C5282 100%);
+    color: #fff;
+    padding: 34px 0 28px;
+    margin-bottom: 26px;
+  }
+  header .wrap { padding-bottom: 0; }
+
+  .hd-top { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .logo-mark {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--orange); flex: none;
+    position: relative; align-self: center;
+  }
+  .logo-mark::before, .logo-mark::after {
+    content: ""; position: absolute; background: #fff;
+  }
+  .logo-mark::before { left: 50%; top: 3px; bottom: 3px; width: 1.5px; transform: translateX(-50%); }
+  .logo-mark::after { top: 50%; left: 3px; right: 3px; height: 1.5px; transform: translateY(-50%); }
+
+  h1 { font-size: 25px; font-weight: 600; letter-spacing: -.3px; }
+  .season-tag {
+    font-size: 12px; padding: 3px 9px; border-radius: 20px;
+    background: rgba(255,255,255,.16); font-weight: 400;
+  }
+  .hd-sub { font-size: 13px; opacity: .8; margin-top: 5px; }
+
+  .hd-bar {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    margin-top: 18px; padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,.14);
+    font-size: 12.5px;
+  }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #51CF66; display: inline-block; margin-right: 6px;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+  .hd-bar .spacer { flex: 1; }
+
+  button {
+    font-family: inherit; font-size: 12.5px; cursor: pointer;
+    border-radius: 7px; border: 1px solid rgba(255,255,255,.28);
+    background: rgba(255,255,255,.12); color: #fff;
+    padding: 6px 13px; transition: background .15s;
+  }
+  button:hover { background: rgba(255,255,255,.22); }
+  button:disabled { opacity: .5; cursor: default; }
+
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .kpi {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 11px; padding: 17px 18px;
+  }
+  .kpi .k-label { font-size: 12px; color: var(--text-2); }
+  .kpi .k-val { font-size: 27px; font-weight: 600; margin-top: 3px; letter-spacing: -.5px; }
+  .kpi .k-val small { font-size: 13px; font-weight: 400; color: var(--text-2); margin-left: 3px; }
+  .kpi.accent .k-val { color: var(--orange); }
+
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 11px; padding: 20px 22px; margin-bottom: 22px;
+  }
+  .card h2 {
+    font-size: 15px; font-weight: 600; margin-bottom: 15px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card h2::before {
+    content: ""; width: 3px; height: 14px;
+    background: var(--orange); border-radius: 2px;
+  }
+
+  .tabs { display: flex; gap: 7px; margin-bottom: 15px; flex-wrap: wrap; }
+  .tab {
+    padding: 6px 15px; border-radius: 7px; font-size: 13px; cursor: pointer;
+    border: 1px solid var(--border); background: #fff; color: var(--text-2);
+    transition: all .15s;
+  }
+  .tab:hover { border-color: var(--orange); color: var(--orange); }
+  .tab.on { background: var(--orange); border-color: var(--orange); color: #fff; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th {
+    text-align: left; font-weight: 500; color: var(--text-2);
+    font-size: 12px; padding: 8px 10px; border-bottom: 1px solid var(--border);
+  }
+  td { padding: 9px 10px; border-bottom: 1px solid #F1F2F4; }
+  tbody tr:hover { background: #FAFBFC; }
+  .num { font-variant-numeric: tabular-nums; }
+  .rank {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 21px; height: 21px; border-radius: 6px;
+    background: #F1F3F5; font-size: 11.5px; color: var(--text-2); font-weight: 500;
+  }
+  .rank.r1 { background: #FFF0E6; color: var(--orange); }
+  .rank.r2 { background: #EEF2F7; color: var(--navy); }
+  .rank.r3 { background: #FDF2E9; color: #B85C38; }
+
+  .wl { font-variant-numeric: tabular-nums; color: var(--text-2); }
+  .wl b { color: var(--green); font-weight: 600; }
+  .wl i { color: var(--red); font-style: normal; }
+  .pts { font-weight: 600; color: var(--orange); font-variant-numeric: tabular-nums; }
+
+  .bar { height: 5px; background: #F1F3F5; border-radius: 3px; overflow: hidden; min-width: 60px; }
+  .bar span { display: block; height: 100%; background: var(--orange); border-radius: 3px; transition: width .5s; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+
+  .score-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 0; border-bottom: 1px solid #F1F2F4; font-size: 13.5px;
+  }
+  .score-row:last-child { border-bottom: none; }
+  .sr-date { color: var(--text-2); font-size: 12px; width: 44px; flex: none; font-variant-numeric: tabular-nums; }
+  .sr-team { flex: 1; }
+  .sr-team.away { text-align: right; }
+  .sr-score {
+    font-weight: 600; font-variant-numeric: tabular-nums;
+    background: #F7F8FA; padding: 2px 10px; border-radius: 6px; min-width: 62px; text-align: center;
+  }
+  .sr-score.win { background: var(--orange-light); color: var(--orange); }
+  .tag {
+    font-size: 11px; color: var(--text-2); background: #F1F3F5;
+    padding: 1px 7px; border-radius: 5px; flex: none;
+  }
+
+  .chart-box { position: relative; height: 340px; }
+
+  .panel {
+    background: #FFFBFA; border: 1px dashed #F0B27A;
+    border-radius: 11px; padding: 18px 20px; margin-bottom: 22px;
+    display: none;
+  }
+  .panel.show { display: block; }
+  .panel h3 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .panel p { font-size: 12.5px; color: var(--text-2); margin-bottom: 12px; }
+  textarea {
+    width: 100%; min-height: 260px; font-family: ui-monospace, Consolas, monospace;
+    font-size: 12px; line-height: 1.55; padding: 12px 14px; resize: vertical;
+    border: 1px solid var(--border); border-radius: 8px; background: #fff; color: var(--text);
+  }
+  textarea:focus { outline: none; border-color: var(--orange); }
+  .row { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  input[type=password] {
+    flex: 1; min-width: 220px; font-family: ui-monospace, monospace; font-size: 12px;
+    padding: 8px 12px; border: 1px solid var(--border); border-radius: 7px; background: #fff; color: var(--text);
+  }
+  input[type=password]:focus { outline: none; border-color: var(--orange); }
+  .btn-solid { background: var(--orange); border-color: var(--orange); color: #fff; }
+  .btn-solid:hover { background: #D9480F; border-color: #D9480F; }
+  .btn-dark { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .btn-dark:hover { background: #162C47; }
+  .msg { font-size: 12.5px; margin-top: 11px; display: none; }
+  .msg.ok { color: var(--green); }
+  .msg.err { color: var(--red); }
+  .msg.show { display: block; }
+
+  footer { text-align: center; font-size: 12px; color: var(--text-2); padding-top: 8px; }
+
+  @media (max-width: 860px) {
+    .kpis { grid-template-columns: repeat(2, 1fr); }
+    .grid2 { grid-template-columns: 1fr; }
+    h1 { font-size: 21px; }
+  }
+</style>
 </head>
 <body>
-    <!-- 导航条 -->
-    <nav class="navbar">
-        <h1 class="nav-title">浙ba数据看板</h1>
-        <!-- <a class="nav-item active" id="home-nav">首页</a> -->
-        <a class="nav-item active" id="home-nav" href="#" onclick="handleHomeClick(event)">首页</a>
-    </nav>
-    <div class="main-container">
-        <!-- 文章概要容器 -->
-        <div id="blog-summaries"></div>
-        <!-- 个人信息侧边栏 -->
-        <div class="sidebar" id="personal-info">
-            <!-- 头像容器 -->
-            <div id="avatar-container"></div>
-        </div>
+
+<header>
+  <div class="wrap">
+    <div class="hd-top">
+      <span class="logo-mark"></span>
+      <h1>浙BA 2026 城市篮球争霸赛</h1>
+      <span class="season-tag" id="seasonTag">第二届</span>
     </div>
-    <!-- 文章详情容器 -->
-    <div id="blog-detail" style="display: none;"></div>
-    <script src="script.js"></script>
+    <div class="hd-sub" id="hdSub">2026 浙江省城市篮球联赛 · 省级争霸赛</div>
+    <div class="hd-bar">
+      <span><span class="dot"></span><span id="syncText">正在同步数据</span></span>
+      <span class="spacer"></span>
+      <span id="updatedText">最后更新：--</span>
+      <button id="refreshBtn">立即刷新</button>
+      <button id="autoBtn">自动刷新：开</button>
+      <button id="editBtn">编辑数据</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="panel" id="editPanel">
+    <h3>编辑赛事数据</h3>
+    <p>直接改下面的 JSON，改完点「保存到 GitHub」，页面会自动刷新。Token 只存在你这台电脑上，不会上传给任何第三方。</p>
+    <textarea id="dataBox" spellcheck="false"></textarea>
+    <div class="row">
+      <input type="password" id="tokenBox" placeholder="粘贴 GitHub Token（仅勾选 repo 权限的 classic token）">
+      <button class="btn-solid" id="saveBtn">保存到 GitHub</button>
+      <button class="btn-dark" id="downloadBtn">下载 data.json</button>
+      <button id="cancelBtn">收起</button>
+    </div>
+    <div class="msg" id="msgBox"></div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="card">
+    <h2>小组积分榜</h2>
+    <div class="tabs" id="groupTabs"></div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:52px">排名</th>
+          <th>队伍</th>
+          <th style="width:92px">胜 - 负</th>
+          <th style="width:60px">积分</th>
+          <th style="width:110px">胜率</th>
+        </tr>
+      </thead>
+      <tbody id="groupBody"></tbody>
+    </table>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>球员得分榜 TOP 10</h2>
+      <div class="chart-box"><canvas id="playerChart"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>球队胜率排行</h2>
+      <div class="chart-box"><canvas id="teamChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>近期赛果</h2>
+      <div id="resultsBox"></div>
+    </div>
+    <div class="card">
+      <h2>后续赛程</h2>
+      <div id="scheduleBox"></div>
+    </div>
+  </div>
+
+  <footer id="footerNote"></footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+const CONFIG = {
+  owner: 'Tangyikangok',
+  repo: 'Tangyikangok.github.io',
+  branch: 'main',
+  dataPath: 'data.json'
+};
+
+const FALLBACK = {
+  meta: {
+    title: '浙BA 2026 城市篮球争霸赛',
+    subtitle: '2026 浙江省城市篮球联赛 · 省级争霸赛',
+    season: '第二届',
+    updatedAt: '2026-10-26 20:00',
+    source: '浙江省篮协大数据平台',
+    note: '当前展示的是内置示例数据，请在仓库根目录放置 data.json 后刷新'
+  },
+  groups: [
+    { name: 'A组', teams: [
+      { rank: 1, team: '台州队', w: 5, l: 1, pts: 11 },
+      { rank: 2, team: '杭州队', w: 4, l: 2, pts: 10 },
+      { rank: 3, team: '安吉队', w: 4, l: 2, pts: 10 },
+      { rank: 4, team: '江山队', w: 3, l: 3, pts: 9 },
+      { rank: 5, team: '余姚队', w: 3, l: 3, pts: 9 },
+      { rank: 6, team: '普陀队', w: 2, l: 4, pts: 8 },
+      { rank: 7, team: '桐乡队', w: 0, l: 6, pts: 6 }
+    ]},
+    { name: 'B组', teams: [
+      { rank: 1, team: '丽水队', w: 5, l: 1, pts: 11 },
+      { rank: 2, team: '临海队', w: 4, l: 2, pts: 10 },
+      { rank: 3, team: '永康队', w: 4, l: 2, pts: 10 },
+      { rank: 4, team: '绍兴队', w: 3, l: 3, pts: 9 },
+      { rank: 5, team: '瑞安队', w: 3, l: 2, pts: 8 },
+      { rank: 6, team: '舟山队', w: 1, l: 4, pts: 6 },
+      { rank: 7, team: '临安队', w: 0, l: 6, pts: 6 }
+    ]},
+    { name: 'C组', teams: [
+      { rank: 1, team: '金华队', w: 5, l: 1, pts: 11 },
+      { rank: 2, team: '温州队', w: 5, l: 1, pts: 11 },
+      { rank: 3, team: '宁海队', w: 4, l: 2, pts: 10 },
+      { rank: 4, team: '诸暨队', w: 3, l: 3, pts: 9 },
+      { rank: 5, team: '衢州队', w: 2, l: 4, pts: 8 },
+      { rank: 6, team: '玉环队', w: 1, l: 5, pts: 7 },
+      { rank: 7, team: '海宁队', w: 1, l: 5, pts: 7 }
+    ]},
+    { name: 'D组', teams: [
+      { rank: 1, team: '苍南队', w: 6, l: 0, pts: 12 },
+      { rank: 2, team: '富阳队', w: 5, l: 1, pts: 11 },
+      { rank: 3, team: '宁波队', w: 3, l: 3, pts: 9 },
+      { rank: 4, team: '义乌队', w: 3, l: 3, pts: 9 },
+      { rank: 5, team: '嘉兴队', w: 2, l: 4, pts: 8 },
+      { rank: 6, team: '湖州队', w: 2, l: 4, pts: 8 },
+      { rank: 7, team: '云和队', w: 0, l: 6, pts: 6 }
+    ]}
+  ],
+  players: [
+    { rank: 1, name: '颜谋植', team: '温州队', pts: 127 },
+    { rank: 2, name: '倪豪凯', team: '丽水队', pts: 119 },
+    { rank: 3, name: '金子淏', team: '临海队', pts: 95 },
+    { rank: 4, name: '练张钦', team: '云和队', pts: 94 },
+    { rank: 5, name: '陈允龙', team: '苍南队', pts: 84 },
+    { rank: 6, name: '李聪聪', team: '海宁队', pts: 80 },
+    { rank: 7, name: '周煜航', team: '江山队', pts: 80 },
+    { rank: 8, name: '徐梓凯', team: '台州队', pts: 80 },
+    { rank: 9, name: '朱浩元', team: '温州队', pts: 80 },
+    { rank: 10, name: '虞航', team: '余姚队', pts: 77 }
+  ],
+  results: [
+    { date: '10-25', home: '衢州队', away: '玉环队', hs: 78, as: 68, group: 'C组' },
+    { date: '10-25', home: '绍兴队', away: '临安队', hs: 75, as: 63, group: 'B组' },
+    { date: '10-21', home: '湖州队', away: '宁波队', hs: 88, as: 84, group: 'D组' }
+  ],
+  schedule: [
+    { date: '10-30', time: '19:30', home: '金华队', away: '海宁队', group: 'C组' },
+    { date: '10-30', time: '19:30', home: '诸暨队', away: '温州队', group: 'C组' },
+    { date: '10-31', time: '19:30', home: '湖州队', away: '义乌队', group: 'D组' },
+    { date: '10-31', time: '19:30', home: '云和队', away: '嘉兴队', group: 'D组' },
+    { date: '11-01', time: '19:30', home: '苍南队', away: '富阳队', group: 'D组' }
+  ]
+};
+
+let appData = null;
+let usingFallback = false;
+let currentGroup = 0;
+let timer = null;
+let autoOn = true;
+let playerChart = null;
+let teamChart = null;
+
+const $ = id => document.getElementById(id);
+
+function esc(s) {
+  return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+}
+
+async function load(silent) {
+  const btn = $('refreshBtn');
+  if (!silent) { btn.disabled = true; btn.textContent = '刷新中'; $('syncText').textContent = '正在同步数据'; }
+
+  try {
+    const url = `${CONFIG.dataPath}?t=${Date.now()}`;
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    appData = await res.json();
+    usingFallback = false;
+  } catch (e) {
+    appData = JSON.parse(JSON.stringify(FALLBACK));
+    usingFallback = true;
+  }
+
+  render();
+  if (!silent) { btn.disabled = false; btn.textContent = '立即刷新'; }
+  $('syncText').textContent = usingFallback ? '使用内置示例数据' : '数据已同步';
+}
+
+function render() {
+  renderMeta();
+  renderKPI();
+  renderTabs();
+  renderGroup();
+  renderResults();
+  renderSchedule();
+  renderCharts();
+}
+
+function allTeams() {
+  return (appData.groups || []).flatMap(g => (g.teams || []).map(t => ({ ...t, group: g.name })));
+}
+
+function winRate(t) {
+  const total = (t.w || 0) + (t.l || 0);
+  return total ? (t.w / total) * 100 : 0;
+}
+
+function renderMeta() {
+  const m = appData.meta || {};
+  document.title = m.title || '浙BA 数据看板';
+  $('seasonTag').textContent = m.season || '';
+  $('hdSub').textContent = m.subtitle || '';
+  $('updatedText').textContent = '最后更新：' + (m.updatedAt || '--');
+  $('footerNote').textContent = (m.source ? '数据来源：' + m.source + '　' : '') + (m.note || '');
+}
+
+function renderKPI() {
+  const teams = allTeams();
+  const total = teams.length;
+  const played = teams.reduce((s, t) => s + (t.w || 0) + (t.l || 0), 0) / 2;
+  const topScorer = (appData.players || [])[0];
+  const undefeated = teams.filter(t => (t.l || 0) === 0 && (t.w || 0) > 0);
+
+  const cards = [
+    { label: '参赛队伍', val: total, unit: '支' },
+    { label: '已赛场次', val: Math.round(played), unit: '场' },
+    { label: '得分王', val: topScorer ? topScorer.pts : '--', unit: topScorer ? '分 · ' + topScorer.name : '', accent: true },
+    { label: '不败球队', val: undefeated.length, unit:undefeated.length ? '支 · ' + undefeated.map(t => t.team.replace('队','')).join('、') : '支' }
+  ];
+
+  $('kpis').innerHTML = cards.map(c => `
+    <div class="kpi${c.accent ? ' accent' : ''}">
+      <div class="k-label">${esc(c.label)}</div>
+      <div class="k-val">${esc(c.val)}<small>${esc(c.unit || '')}</small></div>
+    </div>
+  `).join('');
+}
+
+function renderTabs() {
+  $('groupTabs').innerHTML = (appData.groups || []).map((g, i) =>
+    `<div class="tab${i === currentGroup ? ' on' : ''}" data-i="${i}">${esc(g.name)}</div>`
+  ).join('');
+
+  $('groupTabs').querySelectorAll('.tab').forEach(el => {
+    el.onclick = () => {
+      currentGroup = +el.dataset.i;
+      renderTabs();
+      renderGroup();
+    };
+  });
+}
+
+function renderGroup() {
+  const g = (appData.groups || [])[currentGroup];
+  if (!g) return;
+
+  $('groupBody').innerHTML = (g.teams || []).map(t => {
+    const wr = winRate(t);
+    const rc = t.rank <= 3 ? ' r' + t.rank : '';
+    return `
+      <tr>
+        <td><span class="rank${rc}">${t.rank}</span></td>
+        <td>${esc(t.team)}</td>
+        <td class="wl"><b>${t.w}</b> - <i>${t.l}</i></td>
+        <td class="pts num">${t.pts}</td>
+        <td><div class="bar"><span style="width:${wr.toFixed(0)}%"></span></div></td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function renderResults() {
+  const list = appData.results || [];
+  if (!list.length) {
+    $('resultsBox').innerHTML = '<p style="color:#6B7280;font-size:13px">暂无数据</p>';
+    return;
+  }
+
+  $('resultsBox').innerHTML = list.map(m => {
+    const has = m.hs > 0 || m.as > 0;
+    const hw = m.hs > m.as;
+    return `
+      <div class="score-row">
+        <span class="sr-date">${esc(m.date)}</span>
+        <span class="sr-team">${esc(m.home)}</span>
+        <span class="sr-score${has && hw ? ' win' : ''}">${has ? m.hs + ' : ' + m.as : '未开赛'}</span>
+        <span class="sr-team away">${esc(m.away)}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderSchedule() {
+  const list = appData.schedule || [];
+  if (!list.length) {
+    $('scheduleBox').innerHTML = '<p style="color:#6B7280;font-size:13px">暂无数据</p>';
+    return;
+  }
+
+  $('scheduleBox').innerHTML = list.map(m => `
+    <div class="score-row">
+      <span class="sr-date">${esc(m.date)}</span>
+      <span class="sr-team">${esc(m.home)} vs ${esc(m.away)}</span>
+      <span class="tag">${esc(m.group || '')}</span>
+      <span class="sr-date" style="width:auto">${esc(m.time || '')}</span>
+    </div>
+  `).join('');
+}
+
+function renderCharts() {
+  if (typeof Chart === 'undefined') {
+    document.querySelectorAll('.chart-box').forEach(b => {
+      b.innerHTML = '<p style="color:#6B7280;font-size:13px;text-align:center;padding-top:60px">图表库加载失败，请检查网络</p>';
+    });
+    return;
+  }
+
+  Chart.defaults.font.family = 'system-ui, -apple-system, "PingFang SC", sans-serif';
+  Chart.defaults.color = '#6B7280';
+
+  const players = (appData.players || []).slice(0, 10);
+  if (playerChart) playerChart.destroy();
+  playerChart = new Chart($('playerChart'), {
+    type: 'bar',
+    data: {
+      labels: players.map(p => p.name),
+      datasets: [{
+        label: '总得分',
+        data: players.map(p => p.pts),
+        backgroundColor: '#E8590C',
+        borderRadius: 5,
+        barThickness: 15
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            afterLabel: ctx => players[ctx.dataIndex] ? players[ctx.dataIndex].team : ''
+          }
+        }
+      },
+      scales: {
+        x: { grid: { color: '#F1F3F5' }, beginAtZero: true },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+
+  const top = allTeams()
+    .filter(t => (t.w || 0) + (t.l || 0) > 0)
+    .sort((a, b) => winRate(b) - winRate(a) || b.pts - a.pts)
+    .slice(0, 12);
+
+  if (teamChart) teamChart.destroy();
+  teamChart = new Chart($('teamChart'), {
+    type: 'bar',
+    data: {
+      labels: top.map(t => t.team),
+      datasets: [{
+        label: '胜率 %',
+        data: top.map(t => +winRate(t).toFixed(1)),
+        backgroundColor: top.map(t => {
+          if (t.group === 'A组') return '#E8590C';
+          if (t.group === 'B组') return '#1971C2';
+          if (t.group === 'C组') return '#2F9E44';
+          return '#9C36B5';
+        }),
+        borderRadius: 5,
+        barThickness: 15
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { afterLabel: ctx => top[ctx.dataIndex] ? top[ctx.dataIndex].group : '' } }
+      },
+      scales: {
+        x: { grid: { color: '#F1F3F5' }, beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+function showMsg(text, ok) {
+  const box = $('msgBox');
+  box.textContent = text;
+  box.className = 'msg show ' + (ok ? 'ok' : 'err');
+}
+
+async function saveToGitHub() {
+  const token = $('tokenBox').value.trim();
+  if (!token) { showMsg('请先填写 GitHub Token', false); return; }
+
+  let parsed;
+  try { parsed = JSON.parse($('dataBox').value); }
+  catch (e) { showMsg('JSON 格式有误：' + e.message, false); return; }
+
+  const btn = $('saveBtn');
+  btn.disabled = true;
+  btn.textContent = '提交中';
+  showMsg('正在提交到 GitHub...', true);
+
+  const api = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.dataPath}`;
+  const headers = { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json' };
+
+  try {
+    let sha = null;
+    const get = await fetch(`${api}?ref=${CONFIG.branch}`, { headers });
+    if (get.ok) { sha = (await get.json()).sha; }
+
+    const content = btoa(String.fromCharCode(...new TextEncoder().encode(JSON.stringify(parsed, null, 2))));
+
+    const put = await fetch(api, {
+      method: 'PUT',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: `更新赛事数据 ${new Date().toLocaleString('zh-CN')}`,
+        content,
+        sha,
+        branch: CONFIG.branch
+      })
+    });
+
+    if (!put.ok) {
+      const err = await put.json().catch(() => ({}));
+      throw new Error(err.message || ('HTTP ' + put.status));
+    }
+
+    localStorage.setItem('gh_token', token);
+    showMsg('保存成功，页面正在刷新...', true);
+    setTimeout(() => load(false), 2500);
+  } catch (e) {
+    showMsg('保存失败：' + e.message, false);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '保存到 GitHub';
+  }
+}
+
+function downloadJSON() {
+  try { JSON.parse($('dataBox').value); }
+  catch (e) { showMsg('JSON 格式有误，无法下载：' + e.message, false); return; }
+
+  const blob = new Blob([$('dataBox').value], { type: 'application/json;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'data.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+  showMsg('已下载 data.json，把它拖回仓库根目录覆盖即可', true);
+}
+
+$('refreshBtn').onclick = () => load(false);
+$('saveBtn').onclick = saveToGitHub;
+$('downloadBtn').onclick = downloadJSON;
+$('cancelBtn').onclick = () => $('editPanel').classList.remove('show');
+
+$('editBtn').onclick = () => {
+  const p = $('editPanel');
+  const willShow = !p.classList.contains('show');
+  p.classList.toggle('show', willShow);
+  if (willShow) {
+    $('dataBox').value = JSON.stringify(appData, null, 2);
+    $('tokenBox').value = localStorage.getItem('gh_token') || '';
+  }
+};
+
+$('autoBtn').onclick = () => {
+  autoOn = !autoOn;
+  $('autoBtn').textContent = '自动刷新：' + (autoOn ? '开' : '关');
+  if (autoOn) {
+    clearInterval(timer);
+    timer = setInterval(() => load(true), 60000);
+  } else {
+    clearInterval(timer);
+  }
+};
+
+timer = setInterval(() => { if (autoOn) load(true); }, 60000);
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && autoOn) load(true);
+});
+
+load(false);
+</script>
 </body>
 </html>
