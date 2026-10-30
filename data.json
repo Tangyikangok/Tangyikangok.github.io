@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "title": "浙BA 2026 城市篮球争霸赛",
+    "subtitle": "2026 浙江省城市篮球联赛 · 省级争霸赛",
+    "season": "第二届",
+    "updatedAt": "2026-10-26 20:00",
+    "source": "浙江省篮协大数据平台",
+    "note": "小组赛为 4 组 × 7 队主客场双循环，各组前四晋级 16 强淘汰赛"
+  },
+  "groups": [
+    {
+      "name": "A组",
+      "teams": [
+        { "rank": 1, "team": "台州队", "w": 5, "l": 1, "pts": 11 },
+        { "rank": 2, "team": "杭州队", "w": 4, "l": 2, "pts": 10 },
+        { "rank": 3, "team": "安吉队", "w": 4, "l": 2, "pts": 10 },
+        { "rank": 4, "team": "江山队", "w": 3, "l": 3, "pts": 9 },
+        { "rank": 5, "team": "余姚队", "w": 3, "l": 3, "pts": 9 },
+        { "rank": 6, "team": "普陀队", "w": 2, "l": 4, "pts": 8 },
+        { "rank": 7, "team": "桐乡队", "w": 0, "l": 6, "pts": 6 }
+      ]
+    },
+    {
+      "name": "B组",
+      "teams": [
+        { "rank": 1, "team": "丽水队", "w": 5, "l": 1, "pts": 11 },
+        { "rank": 2, "team": "临海队", "w": 4, "l": 2, "pts": 10 },
+        { "rank": 3, "team": "永康队", "w": 4, "l": 2, "pts": 10 },
+        { "rank": 4, "team": "绍兴队", "w": 3, "l": 3, "pts": 9 },
+        { "rank": 5, "team": "瑞安队", "w": 3, "l": 2, "pts": 8 },
+        { "rank": 6, "team": "舟山队", "w": 1, "l": 4, "pts": 6 },
+        { "rank": 7, "team": "临安队", "w": 0, "l": 6, "pts": 6 }
+      ]
+    },
+    {
+      "name": "C组",
+      "teams": [
+        { "rank": 1, "team": "金华队", "w": 5, "l": 1, "pts": 11 },
+        { "rank": 2, "team": "温州队", "w": 5, "l": 1, "pts": 11 },
+        { "rank": 3, "team": "宁海队", "w": 4, "l": 2, "pts": 10 },
+        { "rank": 4, "team": "诸暨队", "w": 3, "l": 3, "pts": 9 },
+        { "rank": 5, "team": "衢州队", "w": 2, "l": 4, "pts": 8 },
+        { "rank": 6, "team": "玉环队", "w": 1, "l": 5, "pts": 7 },
+        { "rank": 7, "team": "海宁队", "w": 1, "l": 5, "pts": 7 }
+      ]
+    },
+    {
+      "name": "D组",
+      "teams": [
+        { "rank": 1, "team": "苍南队", "w": 6, "l": 0, "pts": 12 },
+        { "rank": 2, "team": "富阳队", "w": 5, "l": 1, "pts": 11 },
+        { "rank": 3, "team": "宁波队", "w": 3, "l": 3, "pts": 9 },
+        { "rank": 4, "team": "义乌队", "w": 3, "l": 3, "pts": 9 },
+        { "rank": 5, "team": "嘉兴队", "w": 2, "l": 4, "pts": 8 },
+        { "rank": 6, "team": "湖州队", "w": 2, "l": 4, "pts": 8 },
+        { "rank": 7, "team": "云和队", "w": 0, "l": 6, "pts": 6 }
+      ]
+    }
+  ],
+  "players": [
+    { "rank": 1, "name": "颜谋植", "team": "温州队", "pts": 127 },
+    { "rank": 2, "name": "倪豪凯", "team": "丽水队", "pts": 119 },
+    { "rank": 3, "name": "金子淏", "team": "临海队", "pts": 95 },
+    { "rank": 4, "name": "练张钦", "team": "云和队", "pts": 94 },
+    { "rank": 5, "name": "陈允龙", "team": "苍南队", "pts": 84 },
+    { "rank": 6, "name": "李聪聪", "team": "海宁队", "pts": 80 },
+    { "rank": 7, "name": "周煜航", "team": "江山队", "pts": 80 },
+    { "rank": 8, "name": "徐梓凯", "team": "台州队", "pts": 80 },
+    { "rank": 9, "name": "朱浩元", "team": "温州队", "pts": 80 },
+    { "rank": 10, "name": "虞航", "team": "余姚队", "pts": 77 }
+  ],
+  "results": [
+    { "date": "10-25", "home": "衢州队", "away": "玉环队", "hs": 78, "as": 68, "group": "C组" },
+    { "date": "10-25", "home": "绍兴队", "away": "临安队", "hs": 75, "as": 63, "group": "B组" },
+    { "date": "10-24", "home": "永康队", "away": "临海队", "hs": 0, "as": 0, "group": "B组" },
+    { "date": "10-23", "home": "金华队", "away": "宁海队", "hs": 0, "as": 0, "group": "C组" },
+    { "date": "10-22", "home": "嘉兴队", "away": "义乌队", "hs": 0, "as": 0, "group": "D组" },
+    { "date": "10-21", "home": "湖州队", "away": "宁波队", "hs": 88, "as": 84, "group": "D组" },
+    { "date": "10-20", "home": "台州队", "away": "普陀队", "hs": 0, "as": 0, "group": "A组" },
+    { "date": "10-18", "home": "义乌队", "away": "苍南队", "hs": 0, "as": 0, "group": "D组" },
+    { "date": "10-18", "home": "云和队", "away": "富阳队", "hs": 0, "as": 0, "group": "D组" }
+  ],
+  "schedule": [
+    { "date": "10-30", "time": "19:30", "home": "金华队", "away": "海宁队", "group": "C组" },
+    { "date": "10-30", "time": "19:30", "home": "诸暨队", "away": "温州队", "group": "C组" },
+    { "date": "10-31", "time": "19:30", "home": "湖州队", "away": "义乌队", "group": "D组" },
+    { "date": "10-31", "time": "19:30", "home": "云和队", "away": "嘉兴队", "group": "D组" },
+    { "date": "11-01", "time": "19:30", "home": "苍南队", "away": "富阳队", "group": "D组" },
+    { "date": "11-02", "time": "19:30", "home": "杭州队", "away": "桐乡队", "group": "A组" },
+    { "date": "11-02", "time": "19:30", "home": "普陀队", "away": "余姚队", "group": "A组" },
+    { "date": "11-02", "time": "19:30", "home": "江山队", "away": "安吉队", "group": "A组" },
+    { "date": "11-03", "time": "19:30", "home": "丽水队", "away": "绍兴队", "group": "B组" },
+    { "date": "11-03", "time": "19:30", "home": "临海队", "away": "舟山队", "group": "B组" },
+    { "date": "11-03", "time": "19:30", "home": "临安队", "away": "瑞安队", "group": "B组" },
+    { "date": "11-04", "time": "19:30", "home": "温州队", "away": "金华队", "group": "C组" },
+    { "date": "11-04", "time": "19:30", "home": "海宁队", "away": "衢州队", "group": "C组" },
+    { "date": "11-04", "time": "19:30", "home": "宁海队", "away": "玉环队", "group": "C组" }
+  ]
+}
