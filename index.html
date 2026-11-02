@@ -255,7 +255,11 @@ tbody tr.q:hover { background:rgba(34,197,94,.1); }
 .m-row:last-child { border-bottom:none; }
 .m-row.next { background:rgba(0,212,255,.1); border-radius:10px; padding-left:10px; padding-right:10px; }
 .m-date { color:#8892a4; font-size:.76rem; width:44px; flex:none; font-variant-numeric:tabular-nums; }
-.m-team { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.m-team { flex:1; min-width:0; display:flex; align-items:center; gap:7px; }
+.m-team.h { justify-content:flex-end; }
+.m-team .nm { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.m-logo { width:20px; height:20px; border-radius:50%; object-fit:cover; flex:none; background:rgba(255,255,255,.08); }
+.t-logo { width:22px; height:22px; border-radius:50%; object-fit:cover; vertical-align:middle; margin-right:8px; background:rgba(255,255,255,.08); }
 .m-sc {
   font-weight:900; font-variant-numeric:tabular-nums; font-style:italic;
   background:rgba(255,255,255,.06); padding:3px 11px; border-radius:7px;
@@ -382,7 +386,13 @@ footer { text-align:center; font-size:.75rem; color:#8892a4; padding:34px 0 8px;
 </div>
 
 <script>
-const CONFIG = { dataPath: 'data.json' };
+const CONFIG = {
+  dataPath: 'data.json',
+  // 可选：填任意返回同结构 JSON 的 API 地址。页面会优先从这里取数，
+  // 失败自动降级到本地 data.json，再失败才用内置示例数据。留空则只读本地文件。
+  apiUrl: '',
+  refreshMs: 60000
+};
 
 const FALLBACK = {
   meta: {
@@ -460,6 +470,7 @@ let timer = null;
 let cdTimer = null;
 let autoOn = true;
 let nextMatch = null;
+let LOGO_MAP = {};
 
 const $ = id => document.getElementById(id);
 
@@ -479,26 +490,48 @@ function parseMatch(m) {
   return new Date(year, mo - 1, d, h, mi);
 }
 
+async function fetchJson(url) {
+  const sep = url.indexOf('?') >= 0 ? '&' : '?';
+  const res = await fetch(url + sep + 't=' + Date.now(), { cache: 'no-store' });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return await res.json();
+}
+
 async function load(silent) {
   const btn = $('refreshBtn');
   if (!silent) { btn.disabled = true; btn.textContent = '刷新中'; $('syncText').textContent = '数据同步中'; }
 
-  try {
-    const res = await fetch(`${CONFIG.dataPath}?t=${Date.now()}`, { cache: 'no-store' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    appData = await res.json();
-    usingFallback = false;
-  } catch (e) {
-    appData = JSON.parse(JSON.stringify(FALLBACK));
-    usingFallback = true;
+  let data = null;
+  let source = '';
+
+  // 1) 远程 API（配置了才走）
+  if (CONFIG.apiUrl) {
+    try { data = await fetchJson(CONFIG.apiUrl); source = 'api'; }
+    catch (e) { console.warn('API 取数失败，降级到本地文件：', e.message); }
+  }
+  // 2) 同目录 data.json
+  if (!data) {
+    try { data = await fetchJson(CONFIG.dataPath); source = 'local'; }
+    catch (e) { console.warn('本地数据读取失败：', e.message); }
+  }
+  // 3) 内置示例数据
+  if (!data) {
+    data = JSON.parse(JSON.stringify(FALLBACK));
+    source = 'fallback';
   }
 
+  appData = data;
+  usingFallback = (source === 'fallback');
   render();
+
   if (!silent) { btn.disabled = false; btn.textContent = '立即刷新'; }
-  $('syncText').textContent = usingFallback ? '内置示例数据' : '数据已同步';
+  $('syncText').textContent = source === 'api' ? 'API 实时同步'
+    : source === 'local' ? '数据已同步'
+    : '内置示例数据';
 }
 
 function render() {
+  buildLogoMap();
   renderMeta();
   renderKPI();
   renderTabs();
@@ -511,6 +544,20 @@ function render() {
 
 function allTeams() {
   return (appData.groups || []).flatMap(g => (g.teams || []).map(t => ({ ...t, group: g.name })));
+}
+
+// 队名 → 队徽地址（官方接口的 logo 字段），页面统一从这里取，避免各处重复
+function buildLogoMap() {
+  LOGO_MAP = {};
+  (appData.groups || []).forEach(g => (g.teams || []).forEach(t => {
+    if (t.team && t.logo) LOGO_MAP[t.team] = t.logo;
+  }));
+}
+
+function logoImg(team, cls) {
+  const src = LOGO_MAP[team];
+  if (!src) return '';
+  return `<img class="${cls}" src="${esc(src)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">`;
 }
 
 function winRate(t) {
@@ -593,7 +640,7 @@ function renderGroup() {
     return `
       <tr class="${q ? 'q' : ''}">
         <td><span class="rank${rc}">${t.rank}</span></td>
-        <td>${esc(t.team)}${q ? '<span class="q-tag">晋级区</span>' : ''}</td>
+        <td>${logoImg(t.team, 't-logo')}${esc(t.team)}${q ? '<span class="q-tag">晋级区</span>' : ''}</td>
         <td class="wl"><b>${t.w}</b> - <i>${t.l}</i></td>
         <td class="pts num">${t.pts}</td>
         <td><div class="bar"><span data-w="${wr.toFixed(0)}" style="background:linear-gradient(90deg,${color},${color}88)"></span></div></td>
@@ -616,9 +663,9 @@ function matchRow(m, showDate) {
   return `
     <div class="m-row">
       ${showDate ? `<span class="m-date">${esc(m.date)}</span>` : ''}
-      <span class="m-team" style="text-align:right">${esc(m.home)}</span>
+      <span class="m-team h">${logoImg(m.home, 'm-logo')}<span class="nm">${esc(m.home)}</span></span>
       <span class="m-sc${hw ? ' win' : ''}">${has ? m.hs + ' : ' + m.as : esc(m.time)}</span>
-      <span class="m-team">${esc(m.away)}</span>
+      <span class="m-team a"><span class="nm">${esc(m.away)}</span>${logoImg(m.away, 'm-logo')}</span>
       <span class="m-tag">${esc(m.group || '')}</span>
     </div>
   `;
@@ -646,9 +693,9 @@ function renderUpcoming() {
     ? list.map((m, i) => `
         <div class="m-row${i === 0 ? ' next' : ''}">
           <span class="m-date">${esc(m.date)}</span>
-          <span class="m-team" style="text-align:right">${esc(m.home)}</span>
+          <span class="m-team h">${logoImg(m.home, 'm-logo')}<span class="nm">${esc(m.home)}</span></span>
           <span class="m-sc">${esc(m.time)}</span>
-          <span class="m-team">${esc(m.away)}</span>
+          <span class="m-team a"><span class="nm">${esc(m.away)}</span>${logoImg(m.away, 'm-logo')}</span>
           ${i === 0 ? '<span class="m-badge">下一场</span>' : `<span class="m-tag">${esc(m.group)}</span>`}
         </div>
       `).join('')
@@ -765,11 +812,12 @@ $('refreshBtn').onclick = () => load(false);
 $('autoBtn').onclick = () => {
   autoOn = !autoOn;
   $('autoBtn').textContent = '自动刷新：' + (autoOn ? '开' : '关');
-  if (!autoOn) clearInterval(timer);
-  else timer = setInterval(() => load(true), 60000);
+  clearInterval(timer);
+  if (autoOn) timer = setInterval(() => load(true), CONFIG.refreshMs);
 };
 
-timer = setInterval(() => { if (autoOn) load(true); }, 60000);
+clearInterval(timer);
+timer = setInterval(() => { if (autoOn) load(true); }, CONFIG.refreshMs);
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden && autoOn) load(true);
 });
