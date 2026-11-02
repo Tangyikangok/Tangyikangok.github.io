@@ -209,11 +209,18 @@ tbody tr.q:hover { background:rgba(34,197,94,.1); }
 @keyframes breathe { 0%,100%{transform:scale(1);opacity:.85} 50%{transform:scale(1.16);opacity:1} }
 
 .hero-in { position:relative; z-index:1; display:flex; align-items:center; gap:26px; flex-wrap:wrap; }
+.hero-main { min-width:0; }
 
-.nxt-tag { font-size:.72rem; letter-spacing:.22em; color:#00d4ff; font-weight:900; font-style:italic; margin-bottom:10px; }
-.nxt-match { font-size:2rem; font-weight:900; font-style:italic; letter-spacing:-.02em; }
-.nxt-match span { color:#f59e0b; margin:0 12px; font-size:1.3rem; }
-.nxt-meta { font-size:.84rem; color:#8892a4; margin-top:8px; }
+.nxt-match { display:flex; flex-direction:column; gap:1px; }
+.hm-row {
+  display:flex; align-items:center; gap:16px; padding:4px 0;
+  font-size:1.55rem; font-weight:900; font-style:italic; letter-spacing:-.02em; line-height:1.32;
+}
+.hm-team { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.hm-team.a { text-align:right; }
+.hm-vs { color:#f59e0b; font-size:.95rem; flex:none; letter-spacing:.04em; }
+.hm-time { font-size:.74rem; color:#8892a4; font-style:normal; font-weight:600; flex:none; width:46px; text-align:right; font-variant-numeric:tabular-nums; }
+.nxt-meta { font-size:.84rem; color:#8892a4; margin-top:10px; }
 
 .cd { display:flex; gap:10px; margin-left:auto; }
 .cd-b {
@@ -225,7 +232,112 @@ tbody tr.q:hover { background:rgba(34,197,94,.1); }
 .cd-l { font-size:.68rem; color:#8892a4; margin-top:3px; letter-spacing:.1em; }
 
 .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:26px; }
+
+/* ===== 我的主队 ===== */
+.myteam-card { padding:22px 24px; }
+.myteam-head { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+.myteam-info { min-width:0; flex:1; }
+.myteam-card .section-title { margin:0 0 10px; }
+.myteam-stats { font-size:.76rem; color:#8892a4; margin-top:7px; }
+.myteam-stats b { color:#00d4ff; font-weight:800; font-style:italic; }
+.myteam-stats i { font-style:normal; color:#22c55e; font-weight:800; }
+.myteam-stats u { text-decoration:none; color:#ef4444; font-weight:800; }
+
+.team-pick {
+  appearance:none; -webkit-appearance:none;
+  background-color:rgba(0,212,255,.08);
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' fill='none' stroke='%2300d4ff' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 13px center;
+  border:1px solid rgba(0,212,255,.3); border-radius:10px;
+  color:#00d4ff; font-size:.84rem; font-weight:700; font-family:inherit;
+  padding:9px 36px 9px 14px; cursor:pointer; outline:none;
+  max-width:210px; transition:background-color .18s, border-color .18s;
+}
+.team-pick:hover, .team-pick:focus { background-color:rgba(0,212,255,.14); border-color:rgba(0,212,255,.55); }
+.team-pick option, .team-pick optgroup { background:#0f1524; color:#e0e0e0; }
+
+.myteam-body { display:grid; grid-template-columns:1fr 1fr; gap:26px; margin-top:20px; }
+.myteam-body:empty { display:none; }
+.mt-col { min-width:0; }
+.mt-col-h { display:flex; align-items:center; gap:8px; padding-bottom:9px; border-bottom:1px solid rgba(255,255,255,.09); }
+.mt-col-h span { font-size:.76rem; font-weight:900; font-style:italic; color:#00d4ff; letter-spacing:.08em; }
+.mt-col-h.up span { color:#f59e0b; }
+.mt-col-h b { margin-left:auto; font-size:.64rem; font-weight:600; color:#8892a4; background:rgba(255,255,255,.06); padding:1px 8px; border-radius:6px; }
+.mt-row { display:flex; align-items:center; gap:8px; padding:7px 0; font-size:.82rem; border-bottom:1px solid rgba(255,255,255,.035); }
+.mt-row:last-child { border-bottom:none; }
+.mt-date { font-size:.68rem; color:#8892a4; width:38px; flex:none; font-variant-numeric:tabular-nums; }
+.mt-t { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#c9d1de; }
+.mt-t.a { text-align:right; }
+.mt-t.me { color:#00d4ff; font-weight:800; }
+.mt-mid {
+  flex:none; font-size:.76rem; font-weight:800; font-variant-numeric:tabular-nums;
+  padding:2px 8px; border-radius:6px; background:rgba(255,255,255,.05); color:#8892a4;
+}
+.mt-mid.win { background:rgba(34,197,94,.16); color:#22c55e; }
+.mt-mid.lose { background:rgba(239,68,68,.14); color:#ef4444; }
+.mt-mid.vs { background:transparent; padding:0; font-weight:600; width:42px; text-align:center; }
+.myteam-empty { text-align:center; color:#8892a4; font-size:.82rem; padding:16px 0 6px; }
+
 @media (max-width:1080px) { .grid2 { grid-template-columns:1fr; } }
+@media (max-width:820px) { .myteam-body { grid-template-columns:1fr; gap:18px; } }
+
+/* ===== 手机适配 ===== */
+@media (max-width:640px) {
+  .container { padding:14px 12px; }
+
+  /* 我的主队 */
+  .myteam-card { padding:18px 16px 18px 22px; border-radius:16px; }
+  .myteam-head { gap:10px; }
+  .myteam-stats { font-size:.7rem; margin-top:5px; }
+  .team-pick { width:100%; max-width:100%; font-size:.8rem; padding:8px 34px 8px 12px; }
+  .myteam-body { gap:16px; margin-top:16px; }
+  .mt-row { font-size:.76rem; gap:6px; padding:6px 0; }
+  .mt-date { width:34px; font-size:.64rem; }
+  .mt-mid { font-size:.7rem; padding:1px 6px; }
+  .mt-mid.vs { width:36px; }
+
+  /* 区块标题统一缩放（我的主队 / 小组积分榜等保持一致） */
+  .section-title { font-size:1.35rem; padding-bottom:13px; }
+  .section-title::before { left:-11px; width:6px; height:24px; }
+  .section-title::after { width:52px; height:2px; }
+
+  /* Hero：倒计时换行铺满，场次字号收敛 */
+  .hero { padding:20px 16px 20px 22px; border-radius:16px; margin-bottom:18px; }
+  .hero-in { gap:14px; }
+  .hero-main { width:100%; }
+  .hm-row { font-size:1.1rem; gap:9px; padding:3px 0; }
+  .hm-vs { font-size:.76rem; }
+  .hm-time { width:38px; font-size:.68rem; }
+  .nxt-meta { font-size:.74rem; margin-top:8px; }
+  .cd { margin-left:0; width:100%; gap:7px; }
+  .cd-b { min-width:0; flex:1; padding:9px 4px; border-radius:10px; }
+  .cd-n { font-size:1.3rem; }
+  .cd-l { font-size:.6rem; }
+
+  /* 积分榜：隐藏胜率列，压缩内边距 */
+  table { font-size:.8rem; }
+  th { padding:8px 5px; font-size:.68rem; letter-spacing:0; }
+  td { padding:9px 5px; }
+  th:last-child, td:last-child { display:none; }
+  .t-logo { width:17px; height:17px; margin-right:4px; }
+  .rank { width:20px; height:20px; font-size:.7rem; border-radius:6px; }
+  .q-tag { display:none; }
+
+  /* 赛程 / 赛果行 */
+  .m-row { gap:6px; font-size:.78rem; padding:8px 0; }
+  .m-date { width:36px; font-size:.68rem; }
+  .m-logo { width:16px; height:16px; }
+  .m-tag, .m-badge { font-size:.58rem; padding:1px 5px; }
+  .m-sc { min-width:46px; padding:2px 7px; font-size:.78rem; }
+  .up-head { padding:12px 0 5px; }
+  .up-day { font-size:.7rem; }
+  .up-wd, .up-cnt { font-size:.62rem; }
+
+  /* 横向条形图 */
+  .hbc-row { font-size:.78rem; gap:8px; }
+  .hbc-lb { width:64px; }
+  .hbc-vl { width:48px; font-size:.78rem; }
+}
 
 .hbc-row { display:flex; align-items:center; gap:11px; padding:6px 0; font-size:.86rem; }
 .hbc-lb {
@@ -271,6 +383,14 @@ tbody tr.q:hover { background:rgba(34,197,94,.1); }
   font-size:.66rem; font-style:italic; font-weight:800; padding:2px 9px; border-radius:7px; flex:none;
   background:rgba(0,212,255,.18); color:#00d4ff; border:1px solid rgba(0,212,255,.4);
 }
+.m-sc.vs { background:transparent; color:#8892a4; font-weight:500; font-style:normal; font-size:.7rem; min-width:32px; padding:0; }
+
+.up-head { display:flex; align-items:center; gap:8px; padding:14px 0 7px; border-bottom:1px solid rgba(255,255,255,.06); }
+.up-head:first-child { padding-top:2px; }
+.up-day { font-size:.76rem; font-weight:800; color:#00d4ff; letter-spacing:.05em; font-style:italic; }
+.up-head.today .up-day { color:#05080f; background:linear-gradient(135deg,#00d4ff,#22c55e); padding:2px 9px; border-radius:6px; font-style:normal; }
+.up-wd { font-size:.7rem; color:#8892a4; font-variant-numeric:tabular-nums; }
+.up-cnt { margin-left:auto; font-size:.66rem; color:#8892a4; background:rgba(255,255,255,.06); padding:1px 8px; border-radius:6px; flex:none; }
 
 .empty { color:#8892a4; font-size:.85rem; }
 
@@ -326,10 +446,21 @@ footer { text-align:center; font-size:.75rem; color:#8892a4; padding:34px 0 8px;
     </div>
   </div>
 
+  <div class="card myteam-card">
+    <div class="myteam-head">
+      <div class="myteam-info">
+        <div class="section-title" style="margin:0 0 10px"><span>我的主队</span></div>
+        <div class="myteam-stats" id="myTeamStats">选一支队伍，看它全部战绩和后续赛程</div>
+      </div>
+      <select id="teamPick" class="team-pick" aria-label="选择我的主队"></select>
+    </div>
+    <div class="myteam-body" id="myTeamBox"></div>
+  </div>
+
   <div class="hero">
     <div class="hero-in">
-      <div>
-        <div class="nxt-tag" id="nxtTag">NEXT MATCH</div>
+      <div class="hero-main">
+        <div class="section-title" id="nxtTag" style="margin:0 0 12px"><span>NEXT MATCH</span></div>
         <div class="nxt-match" id="nxtMatch">加载中</div>
         <div class="nxt-meta" id="nxtMeta"></div>
       </div>
@@ -471,6 +602,7 @@ let cdTimer = null;
 let autoOn = true;
 let nextMatch = null;
 let LOGO_MAP = {};
+let myTeam = '';
 
 const $ = id => document.getElementById(id);
 
@@ -540,6 +672,93 @@ function render() {
   renderUpcoming();
   renderSchedule();
   renderCharts();
+  renderMyTeam();
+}
+
+// ===== 我的主队 =====
+function renderMyTeam() {
+  const sel = $('teamPick');
+  const stats = $('myTeamStats');
+  const box = $('myTeamBox');
+  if (!sel || !stats || !box) return;
+
+  // 选项按分组重建，保留当前选择
+  sel.innerHTML = '<option value="">选择我的主队…</option>' +
+    (appData.groups || []).map(g =>
+      `<optgroup label="${esc(g.name)}">` +
+      (g.teams || []).map(t =>
+        `<option value="${esc(t.team)}"${t.team === myTeam ? ' selected' : ''}>${esc(t.team)}</option>`
+      ).join('') +
+      '</optgroup>'
+    ).join('');
+
+  if (!myTeam) {
+    stats.textContent = '选一支队伍，看它全部战绩和后续赛程';
+    box.innerHTML = '';
+    return;
+  }
+
+  let info = null;
+  (appData.groups || []).forEach(g => (g.teams || []).forEach(t => {
+    if (t.team === myTeam) info = Object.assign({}, t, { group: g.name });
+  }));
+
+  function resultOf(m) {
+    const me = m.home === myTeam ? m.hs : m.as;
+    const op = m.home === myTeam ? m.as : m.hs;
+    return me > op ? 1 : (me < op ? -1 : 0);
+  }
+
+  const matches = (appData.schedule || []).filter(m => m.home === myTeam || m.away === myTeam);
+  const done = matches
+    .filter(m => m.hs !== null && m.hs !== undefined && m.as !== null && m.as !== undefined)
+    .sort((a, b) => parseMatch(b) - parseMatch(a));
+  const up = matches
+    .filter(m => m.hs === null || m.hs === undefined)
+    .sort((a, b) => parseMatch(a) - parseMatch(b));
+
+  const wins = done.filter(m => resultOf(m) === 1).length;
+  const loses = done.length - wins;
+
+  stats.innerHTML = info
+    ? `${esc(info.group)} · 第 <b>${info.rank}</b> · <i>${wins} 胜</i> <u>${loses} 负</u> · 积分 <b>${info.pts}</b>`
+    : `<i>${wins} 胜</i> <u>${loses} 负</u>`;
+
+  const doneRows = done.length
+    ? done.map(m => {
+        const isHome = m.home === myTeam;
+        const r = resultOf(m);
+        const cls = r > 0 ? 'win' : (r < 0 ? 'lose' : '');
+        return `<div class="mt-row">
+          <span class="mt-date">${esc(m.date)}</span>
+          <span class="mt-t a${isHome ? ' me' : ''}">${esc(m.home)}</span>
+          <span class="mt-mid ${cls}">${m.hs}:${m.as}</span>
+          <span class="mt-t${isHome ? '' : ' me'}">${esc(m.away)}</span>
+        </div>`;
+      }).join('')
+    : '<div class="myteam-empty">暂无已完赛比赛</div>';
+
+  const upRows = up.length
+    ? up.map(m => {
+        const isHome = m.home === myTeam;
+        return `<div class="mt-row">
+          <span class="mt-date">${esc(m.date)}</span>
+          <span class="mt-t a${isHome ? ' me' : ''}">${esc(m.home)}</span>
+          <span class="mt-mid vs">${esc(m.time)}</span>
+          <span class="mt-t${isHome ? '' : ' me'}">${esc(m.away)}</span>
+        </div>`;
+      }).join('')
+    : '<div class="myteam-empty">暂无后续赛程</div>';
+
+  box.innerHTML = `
+    <div class="mt-col">
+      <div class="mt-col-h"><span>已完赛</span><b>${done.length} 场</b></div>
+      ${doneRows}
+    </div>
+    <div class="mt-col">
+      <div class="mt-col-h up"><span>即将开始</span><b>${up.length} 场</b></div>
+      ${upRows}
+    </div>`;
 }
 
 function allTeams() {
@@ -680,45 +899,114 @@ function renderResults() {
 
 function renderUpcoming() {
   const now = new Date();
-  const list = (appData.schedule || [])
+  const all = (appData.schedule || [])
     .map(m => ({ ...m, _t: parseMatch(m) }))
     .filter(m => m._t.getTime() > now.getTime())
-    .sort((a, b) => a._t - b._t)
-    .slice(0, 8);
+    .sort((a, b) => a._t - b._t);
 
-  nextMatch = list[0] || null;
+  nextMatch = all[0] || null;
   renderCountdown();
 
-  $('upcomingBox').innerHTML = list.length
-    ? list.map((m, i) => `
-        <div class="m-row${i === 0 ? ' next' : ''}">
-          <span class="m-date">${esc(m.date)}</span>
+  if (!all.length) {
+    $('upcomingBox').innerHTML = '<p class="empty">暂无待赛程</p>';
+    return;
+  }
+
+  // 按比赛日分组（保持时间顺序）
+  const order = [];
+  const byDay = {};
+  all.forEach(m => {
+    if (!byDay[m.date]) { byDay[m.date] = []; order.push(m.date); }
+    byDay[m.date].push(m);
+  });
+
+  const pad = n => String(n).padStart(2, '0');
+  const todayKey = `${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+  const WEEK = '日一二三四五六';
+  const days = order.slice(0, 3);   // 今天 + 之后两个有比赛的比赛日
+  let first = true;
+
+  $('upcomingBox').innerHTML = days.map(date => {
+    const items = byDay[date];
+    const isToday = date === todayKey;
+    const wd = '周' + WEEK[items[0]._t.getDay()];
+    const head = `
+      <div class="up-head${isToday ? ' today' : ''}">
+        <span class="up-day">${isToday ? '今天' : date}</span>
+        <span class="up-wd">${isToday ? date + ' ' + wd : wd}</span>
+        <span class="up-cnt">${items.length} 场</span>
+      </div>`;
+    const rows = items.map(m => {
+      const isNext = first;
+      first = false;
+      return `
+        <div class="m-row${isNext ? ' next' : ''}">
+          <span class="m-date">${esc(m.time)}</span>
           <span class="m-team h">${logoImg(m.home, 'm-logo')}<span class="nm">${esc(m.home)}</span></span>
-          <span class="m-sc">${esc(m.time)}</span>
+          <span class="m-sc vs">VS</span>
           <span class="m-team a"><span class="nm">${esc(m.away)}</span>${logoImg(m.away, 'm-logo')}</span>
-          ${i === 0 ? '<span class="m-badge">下一场</span>' : `<span class="m-tag">${esc(m.group)}</span>`}
-        </div>
-      `).join('')
-    : '<p class="empty">暂无待赛程</p>';
+          ${isNext ? '<span class="m-badge">下一场</span>' : `<span class="m-tag">${esc(m.group)}</span>`}
+        </div>`;
+    }).join('');
+    return head + rows;
+  }).join('');
 }
 
 function renderCountdown() {
   const m = nextMatch;
+
   if (!m) {
-    $('nxtTag').textContent = 'SEASON 2026';
-    $('nxtMatch').textContent = '赛程已结束';
+    $('nxtTag').innerHTML = '<span>SEASON 2026</span>';
+    $('nxtMatch').innerHTML = '<div class="hm-row"><span class="hm-team">赛程已结束</span></div>';
     $('nxtMeta').textContent = '';
     ['cdD', 'cdH', 'cdM', 'cdS'].forEach(id => $(id).textContent = '--');
     return;
   }
 
-  $('nxtTag').textContent = `NEXT MATCH · ${esc(m.round)}`;
-  $('nxtMatch').innerHTML = `${esc(m.home)}<span>VS</span>${esc(m.away)}`;
-  $('nxtMeta').textContent = `${m.date} ${m.time} · ${m.group} · 第 ${m.no} 场`;
+  const pad = n => String(n).padStart(2, '0');
+  const now = new Date();
+  const todayKey = `${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+  const WEEK = '日一二三四五六';
+  const first = parseMatch(m);
+  const isToday = m.date === todayKey;
+
+  // 当天尚未开打的全部场次
+  const todayList = (appData.schedule || [])
+    .map(x => ({ ...x, _t: parseMatch(x) }))
+    .filter(x => x.date === m.date && x._t.getTime() > now.getTime())
+    .sort((a, b) => a._t - b._t);
+
+  const list = isToday && todayList.length ? todayList : [m];
+
+  if (isToday) {
+    $('nxtTag').innerHTML = `<span>今日赛程 · ${esc(m.date)} 周${WEEK[first.getDay()]} · ${list.length} 场</span>`;
+  } else {
+    $('nxtTag').innerHTML = `<span>NEXT MATCH · ${esc(m.round)}</span>`;
+  }
+
+  // 所有场次统一格式，不分主次
+  $('nxtMatch').innerHTML = list.map(x => `
+    <div class="hm-row">
+      <span class="hm-team a">${esc(x.home)}</span>
+      <span class="hm-vs">VS</span>
+      <span class="hm-team">${esc(x.away)}</span>
+      <span class="hm-time">${esc(x.time)}</span>
+    </div>`).join('');
+
+  if (isToday) {
+    const times = [...new Set(list.map(x => x.time))];
+    const groups = [...new Set(list.map(x => x.group).filter(Boolean))];
+    const gtxt = groups.length === 1 ? groups[0] : (groups.length ? `${groups.length} 个小组` : '');
+    const when = times.length === 1 ? `${times[0]} 同时开赛` : `${times[0]} 起`;
+    $('nxtMeta').textContent = gtxt ? `${when} · ${gtxt}` : when;
+  } else {
+    const n = (appData.schedule || []).filter(x => x.date === m.date).length;
+    $('nxtMeta').textContent = `${m.date} ${m.time} · ${m.group} · 当天共 ${n} 场`;
+  }
 
   clearInterval(cdTimer);
   function tick() {
-    const diff = parseMatch(m).getTime() - Date.now();
+    const diff = first.getTime() - Date.now();
     if (diff <= 0) {
       ['cdD', 'cdH', 'cdM', 'cdS'].forEach(id => $(id).textContent = '00');
       clearInterval(cdTimer);
@@ -808,6 +1096,14 @@ function renderCharts() {
 }
 
 $('refreshBtn').onclick = () => load(false);
+
+// 我的主队：读取上次选择 + 绑定切换
+try { myTeam = localStorage.getItem('zba_myteam') || ''; } catch (e) { myTeam = ''; }
+$('teamPick').onchange = (e) => {
+  myTeam = e.target.value || '';
+  try { localStorage.setItem('zba_myteam', myTeam); } catch (err) {}
+  renderMyTeam();
+};
 
 $('autoBtn').onclick = () => {
   autoOn = !autoOn;
