@@ -1,0 +1,83 @@
+{
+  "_note": "cloud.tixiebao.com 接口档案。由抓包响应逐轮反推，供 update_data.py 写字段映射时对照。最后核实 2026-11-02。",
+
+  "base": "https://cloud.tixiebao.com",
+  "resolved_ip": "116.62.12.250",
+  "framework": "RuoYi (若依) / Java Spring REST",
+  "response_envelope": "{ code, msg, data | rows, total }",
+  "list_envelope_guess": "{ total: N, rows: [...], code: 200, msg: 查询成功 }",
+
+  "auth": {
+    "header": "Authorization",
+    "value_format": "裸 JWT，不带 'Bearer ' 前缀",
+    "algorithm": "HS512",
+    "payload_fields": ["member_id", "client_type", "member_key", "memberLogin"],
+    "has_exp_claim": false,
+    "note": "无 exp 字段，有效期由服务端会话控制，会突然失效。2026-11-02 实测用户提供的那枚已返回「登录状态已过期」。",
+    "anonymous_error": "{\"code\":401,\"msg\":\"令牌不能为空\",\"total\":0}",
+    "expired_error": "{\"code\":401,\"msg\":\"登录状态已过期\",\"total\":0}"
+  },
+
+  "gateway": {
+    "only_allowed_prefix": "/system/",
+    "unknown_prefix_error": "{\"code\":500,\"msg\":\"404 NOT_FOUND\",\"total\":0}",
+    "all_system_routes_are_auth_protected": true,
+    "anonymous_readable_endpoints_found": false,
+    "note": "所有 /system/** 路径（含不存在的假路径）匿名访问都返回 401「令牌不能为空」，鉴权发生在路由匹配之前，因此无法用 401/404 枚举真实接口清单。"
+  },
+
+  "confirmed_endpoints": [
+    {
+      "purpose": "首页入口/广告位配置",
+      "hint": "响应含 title『首页-浙ba2026』、url『/pages/other/BA/2026/home/index?typeId=216』",
+      "clue": "typeId=216 是浙BA 2026 专区 ID",
+      "status": "响应已拿到，URL 路径未提供"
+    },
+    {
+      "purpose": "城市图片字典",
+      "path": "/system/dict/data/type/zba_zone_city_pictures",
+      "method": "GET",
+      "dictType": "zba_zone_city_pictures",
+      "status": "路径已实测确认，响应已拿到",
+      "row_shape": { "dictLabel": "城市名", "dictValue": "队徽图片URL", "remark": "疑似城市/队伍业务ID", "dictCode": "字典项自增ID" }
+    }
+  ],
+
+  "naming_convention": {
+    "dict_prefix": "zba_zone_",
+    "speculation": "同系列可能还有 zba_zone_* 的其他字典（赛区、规则、轮次等）",
+    "important": "字典(dict)只存静态配置。积分榜/赛果/赛程是动态业务数据，不会放字典里，必然另有业务 controller 接口。"
+  },
+
+  "city_map": {
+    "_note": "remark 数字极可能是业务接口里的 cityId/teamId；dictCode 是字典项自增 ID。图为 oss.hzjyty.com，本机实测可达 200。",
+    "items": [
+      { "city": "杭州", "remark": "1100", "dictCode": 751, "logo": "https://oss.hzjyty.com/upfile/20260625/8a882e1ce50f4d1cb15069457e133f1e.png" },
+      { "city": "丽水", "remark": "1141", "dictCode": 747, "logo": "https://oss.hzjyty.com/upfile/20260625/e4740d75cdd047cfb598379ca87927ef.png" },
+      { "city": "台州", "remark": "1139", "dictCode": 748, "logo": "https://oss.hzjyty.com/upfile/20260625/66d1a089be034dc1866acf33c8f529b1.png" },
+      { "city": "宁波", "remark": "1135", "dictCode": 750, "logo": "https://oss.hzjyty.com/upfile/20260625/06606d70eb8e4eb0828dbc75b5876a01.png" },
+      { "city": "嘉兴", "remark": "1137", "dictCode": 749, "logo": "https://oss.hzjyty.com/upfile/20260625/92b041a82b3044ecbed37eb5ce75f838.png" },
+      { "city": "温州", "remark": "1136", "dictCode": 752, "logo": "https://oss.hzjyty.com/upfile/20260625/18b3a2d779274ac5949b838ebcff3d1c.png" },
+      { "city": "湖州", "remark": "1144", "dictCode": 753, "logo": "https://oss.hzjyty.com/upfile/20260625/bf36323864a74627bc52cf3527c9a5e0.png" },
+      { "city": "绍兴", "remark": "1142", "dictCode": 754, "logo": "https://oss.hzjyty.com/upfile/20260625/da160bd89c6a40cca2410591ea78b551.png" },
+      { "city": "舟山", "remark": "1143", "dictCode": 755, "logo": "https://oss.hzjyty.com/upfile/20260625/5f14b9e39e3247b5890f44c682bcd091.png" },
+      { "city": "衢州", "remark": "1138", "dictCode": 756, "logo": "https://oss.hzjyty.com/upfile/20260625/50782d5a9b5f47ee8fa3010231e3f0ad.png" },
+      { "city": "金华", "remark": "1140", "dictCode": 757, "logo": "https://oss.hzjyty.com/upfile/20260625/2ddc9f066bef4c5ab3ede8e7b80c19fc.png" }
+    ]
+  },
+
+  "still_missing": [
+    "一枚未过期的 Authorization JWT（放进 GitHub Secrets，勿写进代码）",
+    "积分榜/赛果业务接口的：URL 路径 + POST 表单参数 + 完整响应 JSON",
+    "抓包定位法：点进浙BA专区 → 点『积分榜』或『赛程』tab → 过滤 cloud.tixiebao.com → 找响应里含队名(苍南/台州/温州)或 win/loss/score/rank 字段、且体积明显大于配置类的那条"
+  ],
+
+  "infra_ready": {
+    "note": "自动落地管道已就绪，只差上面的字段映射，页面无需改动",
+    "files": [
+      "auto/update_data.py —— fetch_remote() 已支持 POST/表单/JSON/JWT/原始响应落盘",
+      ".github/workflows/update.yml —— 已注入 DATA_SOURCE_* 变量与 TIXIEBAO_TOKEN Secret",
+      "index.html —— CONFIG.apiUrl 三级兜底"
+    ]
+  }
+}
