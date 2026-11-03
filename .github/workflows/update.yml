@@ -1,0 +1,41 @@
+name: 自动更新浙BA比赛数据
+
+on:
+  schedule:
+    - cron: '0 0,8,13 * * *'
+  push:
+    paths:
+      - 'auto/feed.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: 准备 Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+
+      - name: 生成 data.json
+        env:
+          TIXIEBAO_TOKEN: ${{ secrets.TIXIEBAO_TOKEN }}
+        run: python auto/update_data.py
+
+      - name: 提交变更
+        run: |
+          git config user.name "zba-bot"
+          git config user.email "zba-bot@users.noreply.github.com"
+          git add data.json
+          if git diff --staged --quiet; then
+            echo "数据无变化，跳过提交"
+          else
+            git commit -m "chore: 自动更新比赛数据"
+            git push
+          fi
