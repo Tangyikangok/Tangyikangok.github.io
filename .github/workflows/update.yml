@@ -5,7 +5,7 @@ on:
     - cron: '0 0,8,14 * * *'
   push:
     paths:
-      - 'auto/feed.json'
+      - 'zba/auto/feed.json'
   workflow_dispatch:
 
 permissions:
@@ -26,13 +26,34 @@ jobs:
       - name: 生成 data.json
         env:
           TIXIEBAO_TOKEN: ${{ secrets.TIXIEBAO_TOKEN }}
-        run: python auto/update_data.py
+        run: python zba/auto/update_data.py
+
+      - name: 提交前安全自检
+        env:
+          TIXIEBAO_TOKEN: ${{ secrets.TIXIEBAO_TOKEN }}
+        run: |
+          if [ -z "$TIXIEBAO_TOKEN" ]; then
+            echo "未配置 TIXIEBAO_TOKEN，跳过自检"
+            exit 0
+          fi
+          LEAK=0
+          for f in zba/data.json zba/index.html zba/auto/feed.json zba/auto/api_map.json; do
+            if [ -f "$f" ] && grep -qF "$TIXIEBAO_TOKEN" "$f"; then
+              echo "::error file=$f::检测到凭证出现在待提交文件中：$f"
+              LEAK=1
+            fi
+          done
+          if [ "$LEAK" -eq 1 ]; then
+            echo "::error::安全自检失败，已中止提交。"
+            exit 1
+          fi
+          echo "安全自检通过"
 
       - name: 提交变更
         run: |
           git config user.name "zba-bot"
           git config user.email "zba-bot@users.noreply.github.com"
-          git add data.json
+          git add zba/data.json
           if git diff --staged --quiet; then
             echo "数据无变化，跳过提交"
           else
