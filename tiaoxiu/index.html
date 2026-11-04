@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>调休假查询系统</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-orbs">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+  </div>
+
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">休</div>
+        <div class="brand-txt">
+          <h1 id="appTitle">调休假查询系统</h1>
+          <div class="subtitle" id="appSubtitle"></div>
+        </div>
+      </div>
+      <div class="actions">
+        <span id="fileStatus" class="chip">正在加载数据…</span>
+        <span id="staleBadge" class="chip badge-dirty" style="display:none">数据待更新</span>
+        <button id="btnPrivacy" class="btn ghost" title="隐藏或显示汇总统计与全部人员明细">只看本人</button>
+        <button id="btnReload" class="btn" title="重新拉取最新数据">刷新</button>
+        <button id="btnLock" class="btn ghost" title="清除已记住的口令并重新锁定" style="display:none">锁定</button>
+      </div>
+    </header>
+
+    <section id="lockPanel" class="lock" style="display:none">
+      <div class="lock-card">
+        <svg class="lock-ico" viewBox="0 0 24 24" width="34" height="34" aria-hidden="true">
+          <rect x="4" y="10.5" width="16" height="10.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="12" cy="15.5" r="1.4" fill="currentColor"/>
+        </svg>
+        <h2 class="lock-title">数据已加密</h2>
+        <p class="lock-desc">请输入管理员发放的查询口令</p>
+        <div class="lock-form">
+          <input id="pwInput" type="password" placeholder="查询口令" autocomplete="off" />
+          <button id="btnUnlock" class="btn primary">解锁</button>
+        </div>
+        <div id="lockErr" class="lock-err"></div>
+        <div class="lock-tip">口令只在本次访问期间记住，关闭浏览器标签页即失效</div>
+      </div>
+    </section>
+
+    <section id="mainBody">
+    <section class="searchbar">
+      <div class="search-box">
+        <span class="search-ico">🔍</span>
+        <input id="searchInput" type="text" placeholder="输入姓名查询剩余可用调休天数…" autocomplete="off" autofocus />
+        <button id="searchClear" class="search-clear" title="清除">×</button>
+      </div>
+      <div id="searchResult" class="search-result"></div>
+    </section>
+
+    <section id="summary" class="summary"></section>
+
+    <section id="cockpit" class="cockpit"></section>
+
+    <nav id="yearTabs" class="year-tabs"></nav>
+
+    <main class="table-area">
+      <div id="tableWrap" class="table-wrap"></div>
+      <div id="emptyHint" class="empty-hint">
+        <div class="eh-ico">📄</div>
+        <p id="emptyText">正在从金山文档同步数据，请稍候…</p>
+      </div>
+    </main>
+
+    <footer class="foot">
+      <span id="footNote"></span>
+    </footer>
+    </section>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="config.js"></script>
+  <script src="crypto.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
