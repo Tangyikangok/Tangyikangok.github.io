@@ -353,3 +353,23 @@ thead th.c-g{width:78px;min-width:78px}
   .month .sep{margin:0}
   tbody td{padding:5px 5px}
 }
+
+/* ============================================================
+   本人视图欢迎条（登录后常驻，替代一闪而过的 toast）
+   ============================================================ */
+.welcome{display:flex;align-items:center;gap:12px;margin:14px 0 6px;padding:13px 18px;
+  border:1px solid rgba(34,211,238,.35);border-radius:14px;
+  background:linear-gradient(135deg,rgba(34,211,238,.13),rgba(168,85,247,.08));
+  color:var(--txt);font-size:15px;font-weight:600}
+.welcome .w-ico{font-size:19px;line-height:1}
+.welcome .w-name{background:linear-gradient(135deg,var(--cyan),var(--purple));
+  -webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800}
+.welcome .w-sub{margin-left:auto;font-weight:400;font-size:12.5px;color:var(--txt-dim)}
+
+/* 手机端：键盘会挡住底部 toast，改到顶部显示 */
+@media (max-width:720px){
+  .toast{bottom:auto;top:14px;transform:translateX(-50%) translateY(-16px)}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  .welcome{flex-wrap:wrap;gap:6px;padding:12px 14px;font-size:14px}
+  .welcome .w-sub{margin-left:0;width:100%}
+}

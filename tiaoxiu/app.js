@@ -69,6 +69,7 @@
   const state = { years: [], activeYearKey: null, updatedAt: null, source: '', loading: false };
   let privacyHide = CFG.privacyDefault;   // true = 只看本人（隐藏汇总/驾驶舱/全员明细）
   let viewMode = 'admin';                 // 'admin' 全员视图 | 'self' 员工本人视图
+  let selfName = '';                      // 本人视图下的员工姓名
   let currentSearchKey = '';
   let tableForceShow = false;
 
@@ -204,6 +205,7 @@
     obj.updatedAt = obj.updatedAt || data.updatedAt;
     obj.source = obj.source || '金山文档';
     viewMode = 'admin';
+    selfName = '';
     hydrate(obj);
   }
 
@@ -226,6 +228,7 @@
       };
     });
     viewMode = 'self';
+    selfName = slice.name;
     privacyHide = false;                    // 本人视图直接展示明细
     hydrate({ years: years, updatedAt: data.updatedAt, source: '金山文档' });
     return true;
@@ -422,6 +425,22 @@
         btn.textContent = privacyHide ? '显示全部' : '只看本人';
       }
     }
+
+    /* 本人视图：顶部常驻欢迎条（不依赖 toast），并隐藏搜索框 */
+    const wb = document.getElementById('welcomeBar');
+    const sb = document.getElementById('searchBar');
+    if (wb) {
+      if (selfMode) {
+        wb.style.display = '';
+        wb.innerHTML = '<span class="w-ico">👋</span>' +
+          '<span>你好，<span class="w-name">' + escapeHtml(selfName || '') + '</span></span>' +
+          '<span class="w-sub">以下仅显示你本人的调休记录</span>';
+      } else {
+        wb.style.display = 'none';
+        wb.innerHTML = '';
+      }
+    }
+    if (sb) sb.style.display = selfMode ? 'none' : '';
   }
 
   function renderYears() {
@@ -698,6 +717,7 @@
     document.getElementById('btnLock').onclick = function () {
       sessionStorage.removeItem(CRED_KEY);
       viewMode = 'admin';
+      selfName = '';
       privacyHide = CFG.privacyDefault;
       state.years = [];
       state.activeYearKey = null;
