@@ -432,7 +432,7 @@
     if (wb) {
       if (selfMode) {
         wb.style.display = '';
-        wb.innerHTML = '<span class="w-ico">👋</span>' +
+        wb.innerHTML = '<span class="w-ico"></span>' +
           '<span>你好，<span class="w-name">' + escapeHtml(selfName || '') + '</span></span>' +
           '<span class="w-sub">以下仅显示你本人的调休记录</span>';
       } else {
