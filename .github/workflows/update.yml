@@ -2,7 +2,7 @@ name: 自动更新浙BA比赛数据
 
 on:
   schedule:
-    - cron: '0 0,8,14 * * *'
+    - cron: '0 0,8,23 * * *'
   push:
     paths:
       - 'zba/auto/feed.json'
