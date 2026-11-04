@@ -40,13 +40,14 @@
           <circle cx="12" cy="15.5" r="1.4" fill="currentColor"/>
         </svg>
         <h2 class="lock-title">数据已加密</h2>
-        <p class="lock-desc">请输入管理员发放的查询口令</p>
+        <p class="lock-desc">员工请输入「姓名 + 密码」；管理员姓名填 <b>admin</b> + 总密码</p>
         <div class="lock-form">
-          <input id="pwInput" type="password" placeholder="查询口令" autocomplete="off" />
-          <button id="btnUnlock" class="btn primary">解锁</button>
+          <input id="nameInput" type="text" placeholder="姓名" autocomplete="off" />
+          <input id="pwInput" type="password" placeholder="密码" autocomplete="off" />
+          <button id="btnUnlock" class="btn primary">查询</button>
         </div>
         <div id="lockErr" class="lock-err"></div>
-        <div class="lock-tip">口令只在本次访问期间记住，关闭浏览器标签页即失效</div>
+        <div class="lock-tip">密码由管理员设置；点右上角「锁定」或关闭标签页即退出</div>
       </div>
     </section>
 

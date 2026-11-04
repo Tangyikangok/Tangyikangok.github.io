@@ -291,15 +291,65 @@ thead th.c-g{width:78px;min-width:78px}
 .lock-ico{color:var(--cyan);margin-bottom:12px}
 .lock-title{margin:0 0 6px;font-size:18px;font-weight:700;color:var(--txt);letter-spacing:.5px}
 .lock-desc{margin:0 0 18px;font-size:13px;color:var(--txt-dim)}
-.lock-form{display:flex;gap:10px;justify-content:center}
-#pwInput{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--line-strong);border-radius:11px;
+.lock-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+#nameInput,#pwInput{flex:1 1 120px;min-width:0;background:rgba(255,255,255,.05);border:1px solid var(--line-strong);border-radius:11px;
   color:var(--txt);padding:10px 14px;font-size:14px;outline:none;transition:.18s}
-#pwInput:focus{border-color:var(--cyan);box-shadow:0 0 14px rgba(34,211,238,.22)}
-#pwInput::placeholder{color:var(--txt-faint)}
+#nameInput:focus,#pwInput:focus{border-color:var(--cyan);box-shadow:0 0 14px rgba(34,211,238,.22)}
+#nameInput::placeholder,#pwInput::placeholder{color:var(--txt-faint)}
 .lock-err{margin-top:12px;font-size:13px;color:var(--red);display:none}
 .lock-tip{margin-top:14px;font-size:11.5px;color:var(--txt-faint);line-height:1.7}
 
 @media (max-width:720px){
   .lock-card{padding:22px 18px}
   .lock-form{flex-direction:column}
+}
+
+/* ============================================================
+   手机端表格适配：只冻结「姓名」一列，其余列可横向滑动
+   —— 之前冻结了 姓名+剩余+休假+调休 共 400px，比手机视口(≈360px)还宽，
+      冻结块把可视区完全盖住，月份只能在其背后滚动，表现为「表头动了、数据不动」。
+   现在：姓名(84px) 固定；剩余/休假/调休 不再冻结（默认可见，左滑时滑走）；
+        去掉内部纵向滚动与毛玻璃（移动端合成层会导致表头/表体重绘不同步）。
+   ============================================================ */
+@media (max-width:720px){
+  .table-wrap{
+    max-height:none;                 /* 取消表格内部纵向滚动，交给页面滚动 */
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-x:contain;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+    background:#0d1220;
+  }
+  table{min-width:max-content;font-size:12.5px}
+
+  /* 只冻结姓名列，并收窄到手机友好宽度（高 z-index 保证盖住滑过的列） */
+  .table-wrap thead th.name-col,
+  .table-wrap tbody td.name-col{
+    position:sticky; left:0; top:auto; z-index:9;
+    width:84px; min-width:84px; max-width:84px;
+    box-shadow:2px 0 8px rgba(0,0,0,.55);
+  }
+  .table-wrap thead th.name-col{background:#10162a}
+  .table-wrap tbody td.name-col{background:#121829}
+  .table-wrap tbody tr:hover td.name-col{background:#15203a}
+
+  /* 取消 剩余 / 休假合计 / 调休合计 的横向+纵向冻结
+     （用 .table-wrap 提高优先级，压过全局 thead tr:first-child th 的 sticky） */
+  .table-wrap thead th.c-rem,
+  .table-wrap thead th.c-holiday,
+  .table-wrap thead th.c-tiao,
+  .table-wrap tbody td.remain,
+  .table-wrap tbody td.tot-holiday,
+  .table-wrap tbody td.tot-tiao{
+    position:static; left:auto; top:auto; z-index:auto; box-shadow:none;
+  }
+
+  /* 月份列收窄，一屏能多看几个月 */
+  thead th.mh{width:64px; min-width:64px; font-size:11.5px}
+  .month{padding:5px 2px}
+  .month .ed{min-width:20px; padding:2px 3px; font-size:12px}
+  .month .sep{margin:0}
+  tbody td{padding:5px 5px}
 }

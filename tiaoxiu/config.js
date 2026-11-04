@@ -17,6 +17,10 @@ window.TX_CONFIG = {
      'https://raw.githubusercontent.com/用户名/仓库名/main/data/leave-data.json' */
   dataUrl: 'data/leave-data.json',
 
+  /* 管理员登录名：在登录框姓名处填这个值 + 管理员总密码 = 查看全员。
+     员工则填自己的姓名 + 各自密码，只能看到本人数据。 */
+  adminName: 'admin',
+
   /* 是否默认隐藏「汇总 / 驾驶舱 / 逐人明细表」，只显示搜索结果。
      true  = 员工打开只看自己要查的人，防止旁人窥视（推荐）
      false = 一进页面就展示全部明细 */

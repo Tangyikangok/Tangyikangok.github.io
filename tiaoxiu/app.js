@@ -68,6 +68,7 @@
   const MONTHS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   const state = { years: [], activeYearKey: null, updatedAt: null, source: '', loading: false };
   let privacyHide = CFG.privacyDefault;   // true = 只看本人（隐藏汇总/驾驶舱/全员明细）
+  let viewMode = 'admin';                 // 'admin' 全员视图 | 'self' 员工本人视图
   let currentSearchKey = '';
   let tableForceShow = false;
 
@@ -154,8 +155,17 @@
   }
 
   /* ---------------- 加密数据解锁 ---------------- */
-  const PW_KEY = 'tiaoxiu:pw';          // 口令只存 sessionStorage，关闭标签页即失效
+  const CRED_KEY = 'tiaoxiu:cred';      // {n:姓名,p:密码}，仅 sessionStorage，关标签页即失效
   let pendingEncrypted = null;          // 当前待解密的数据包
+
+  function readCred() {
+    try {
+      const raw = sessionStorage.getItem(CRED_KEY);
+      if (!raw) return null;
+      const c = JSON.parse(raw);
+      return (c && c.n && c.p) ? c : null;
+    } catch (e) { return null; }
+  }
 
   function showLock(errMsg) {
     const lp = document.getElementById('lockPanel');
@@ -167,12 +177,14 @@
       e.textContent = errMsg || '';
       e.style.display = errMsg ? 'block' : 'none';
     }
-    setStatus('数据已加密，请输入口令');
+    setStatus(errMsg ? '登录失败' : '请输入姓名和密码');
     const btn = document.getElementById('btnLock');
     if (btn) btn.style.display = 'none';
     if (!errMsg) {
-      const inp = document.getElementById('pwInput');
-      if (inp) setTimeout(function () { inp.focus(); }, 60);
+      const ni = document.getElementById('nameInput');
+      const pi = document.getElementById('pwInput');
+      if (ni) setTimeout(function () { ni.focus(); }, 60);
+      else if (pi) setTimeout(function () { pi.focus(); }, 60);
     }
   }
 
@@ -185,32 +197,78 @@
     if (btn) btn.style.display = '';
   }
 
-  /* 用口令解密并 hydrate；失败返回 false */
-  async function unlockWith(pkg, password) {
+  /* v2：管理员全量解密 */
+  async function applyAdmin(data, pw) {
+    const plain = await TXCrypto.decryptAdmin(data, pw);
+    const obj = JSON.parse(plain);
+    obj.updatedAt = obj.updatedAt || data.updatedAt;
+    obj.source = obj.source || '金山文档';
+    viewMode = 'admin';
+    hydrate(obj);
+  }
+
+  /* v2：员工本人解密，只保留当前姓名那一个人 */
+  async function applySelf(data, name, pw) {
+    const entry = await TXCrypto.findPerson(data, name);
+    if (!entry) return false;
+    const plain = await TXCrypto.decryptPerson(entry, pw, data.iter);
+    const slice = JSON.parse(plain);
+    const years = (slice.years || []).map(function (yr) {
+      return {
+        year: yr.year,
+        persons: [{
+          name: slice.name,
+          dept: slice.dept || '',
+          clearStatus: yr.clearStatus || '',
+          G: yr.G,
+          months: yr.months
+        }]
+      };
+    });
+    viewMode = 'self';
+    privacyHide = false;                    // 本人视图直接展示明细
+    hydrate({ years: years, updatedAt: data.updatedAt, source: '金山文档' });
+    return true;
+  }
+
+  /* v2 登录：姓名 + 密码 */
+  async function unlockV2(data, cred) {
+    const name = String(cred.n || '').trim();
+    const pw = String(cred.p || '');
+    if (!name || !pw) return false;
+    if (name === (CFG.adminName || 'admin')) {
+      try { await applyAdmin(data, pw); return true; } catch (e) { return false; }
+    }
+    return applySelf(data, name, pw);
+  }
+
+  /* v1 兼容：旧单包只认密码 */
+  async function unlockV1(data, pw) {
     try {
-      const plain = await TXCrypto.decrypt(pkg, password);
+      const plain = await TXCrypto.decrypt(data, pw);
       const obj = JSON.parse(plain);
-      obj.updatedAt = obj.updatedAt || pkg.updatedAt;
-      obj.source = obj.source || pkg.source;
+      obj.updatedAt = obj.updatedAt || data.updatedAt;
+      obj.source = obj.source || data.source;
+      viewMode = 'admin';
       hydrate(obj);
       return true;
-    } catch (e) {
-      return false;
-    }
+    } catch (e) { return false; }
   }
 
   /* ---------------- 加载数据 ---------------- */
   async function consumeData(data, fresh) {
     if (!data) return false;
+    const isV2 = window.TXCrypto && TXCrypto.isV2 && TXCrypto.isV2(data);
+    const isV1 = !isV2 && window.TXCrypto && TXCrypto.isEncrypted && TXCrypto.isEncrypted(data);
 
-    if (window.TXCrypto && TXCrypto.isEncrypted(data)) {
+    if (isV2 || isV1) {
       if (!TXCrypto.available()) {
         setStatus('当前环境不支持解密');
         showEmpty('浏览器不支持解密。<br>请通过 <b>https</b> 或 <b>localhost</b> 访问本页面。');
         return false;
       }
-      const pw = sessionStorage.getItem(PW_KEY) || '';
-      if (!pw) {
+      const cred = readCred();
+      if (!cred) {
         pendingEncrypted = data;
         state.updatedAt = data.updatedAt || null;
         saveCache(data);
@@ -218,19 +276,28 @@
         showLock('');
         return false;
       }
-      if (await unlockWith(data, pw)) {
+      let ok = false;
+      try {
+        if (isV2) ok = await unlockV2(data, cred);
+        else ok = await unlockV1(data, cred.p || '');
+      } catch (e) {
+        ok = false;
+      }
+      if (ok) {
         saveCache(data);
         afterLoad(fresh);
         showBody();
         return true;
       }
-      sessionStorage.removeItem(PW_KEY);
+      sessionStorage.removeItem(CRED_KEY);
       pendingEncrypted = data;
       updateStatusChip(fresh);
-      showLock('已保存的口令失效了，请重新输入');
+      showLock(isV2 ? '姓名或密码不正确' : '旧口令失效，请重新输入');
       return false;
     }
 
+    // 明文数据
+    viewMode = 'admin';
     hydrate(data);
     saveCache(data);
     afterLoad(fresh);
@@ -321,9 +388,14 @@
     const hint = document.getElementById('emptyHint');
     const btn = document.getElementById('btnPrivacy');
     const searching = !!currentSearchKey;
-    const tableVisible = !privacyHide || searching || tableForceShow;
+    const selfMode = (viewMode === 'self');
+    const tableVisible = selfMode || !privacyHide || searching || tableForceShow;
 
-    if (privacyHide) {
+    if (selfMode) {
+      // 本人视图：显示自己的汇总与明细，隐藏全员排名和隐私开关
+      if (sum) { sum.style.display = ''; renderSummary(); }
+      if (cp) { cp.style.display = 'none'; cp.innerHTML = ''; }
+    } else if (privacyHide) {
       if (sum) { sum.style.display = 'none'; sum.innerHTML = ''; }
       if (cp) { cp.style.display = 'none'; cp.innerHTML = ''; }
     } else {
@@ -342,7 +414,14 @@
       if (!state.years.length && hint) hint.style.display = 'block';
     }
 
-    if (btn) btn.textContent = privacyHide ? '显示全部' : '只看本人';
+    if (btn) {
+      if (selfMode) {
+        btn.style.display = 'none';
+      } else {
+        btn.style.display = '';
+        btn.textContent = privacyHide ? '显示全部' : '只看本人';
+      }
+    }
   }
 
   function renderYears() {
@@ -572,45 +651,63 @@
 
     document.getElementById('btnReload').onclick = function () { loadData(true); };
 
-    /* 解锁：输入口令解密 */
+    /* 登录：姓名 + 密码 */
     async function tryUnlock() {
-      const inp = document.getElementById('pwInput');
-      const pw = inp.value.trim();
-      if (!pw) { showLock('请输入口令'); return; }
+      const ni = document.getElementById('nameInput');
+      const pi = document.getElementById('pwInput');
+      const name = (ni && ni.value ? ni.value : '').trim();
+      const pw = (pi && pi.value ? pi.value : '').trim();
+      if (!name) { showLock('请输入姓名'); return; }
+      if (!pw) { showLock('请输入密码'); return; }
       const btn = document.getElementById('btnUnlock');
       const pkg = pendingEncrypted || (loadCache() && loadCache().data);
       if (!pkg) { showLock('数据尚未加载完成，请稍候'); return; }
       btn.disabled = true;
-      btn.textContent = '解锁中…';
-      const ok = await unlockWith(pkg, pw);
+      btn.textContent = '查询中…';
+      let ok = false;
+      try {
+        if (TXCrypto.isV2 && TXCrypto.isV2(pkg)) ok = await unlockV2(pkg, { n: name, p: pw });
+        else ok = await unlockV1(pkg, pw);
+      } catch (e) {
+        ok = false;
+      }
       btn.disabled = false;
-      btn.textContent = '解锁';
+      btn.textContent = '查询';
       if (ok) {
-        sessionStorage.setItem(PW_KEY, pw);
-        inp.value = '';
+        sessionStorage.setItem(CRED_KEY, JSON.stringify({ n: name, p: pw }));
+        if (pi) pi.value = '';
+        if (ni) ni.value = '';
         saveCache(pkg);
         afterLoad(true);
         showBody();
-        toast('已解锁');
+        toast(viewMode === 'self' ? ('你好，' + name) : '管理员已登录');
       } else {
-        showLock('口令不正确，或数据已损坏，请重试');
+        showLock(name === (CFG.adminName || 'admin') ? '管理员密码不正确' : '姓名或密码不正确');
       }
     }
     document.getElementById('btnUnlock').onclick = tryUnlock;
     document.getElementById('pwInput').addEventListener('keydown', function (e) {
       if (e.key === 'Enter') { e.preventDefault(); tryUnlock(); }
     });
+    const nameEl = document.getElementById('nameInput');
+    if (nameEl) nameEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); document.getElementById('pwInput').focus(); }
+    });
 
-    /* 锁定：清掉口令重新上锁 */
+    /* 锁定：清掉登录信息重新上锁 */
     document.getElementById('btnLock').onclick = function () {
-      sessionStorage.removeItem(PW_KEY);
+      sessionStorage.removeItem(CRED_KEY);
+      viewMode = 'admin';
+      privacyHide = CFG.privacyDefault;
       state.years = [];
       state.activeYearKey = null;
       const tw = document.getElementById('tableWrap');
       if (tw) tw.innerHTML = '';
       showLock('');
-      const inp = document.getElementById('pwInput');
-      if (inp) inp.value = '';
+      const pi = document.getElementById('pwInput');
+      if (pi) pi.value = '';
+      const ni = document.getElementById('nameInput');
+      if (ni) ni.value = '';
     };
 
     document.getElementById('cockpit').addEventListener('click', function (e) {
