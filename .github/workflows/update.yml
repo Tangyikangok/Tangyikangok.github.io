@@ -1,14 +1,32 @@
 name: 自动更新浙BA比赛数据
 
 on:
+  # ⚠️ GitHub 的 cron 固定按 UTC 解析，不能填北京时间。
+  #    好消息：中国不实行夏令时，北京 = UTC+8 永久固定，换算一次就永远有效。
+  #    北京 21:07 = UTC 13:07 ｜ 北京 09:07 = UTC 01:07
+  #
+  # 为什么用 7 分 / 37 分，而不是 0 分 / 30 分：
+  #   官方原文：「The schedule event can be delayed during periods of high loads...
+  #   High load times include the start of every hour. If the load is sufficiently
+  #   high enough, some queued jobs may be dropped.」
+  #   → 整点是高负载，既会延迟又可能整条被丢弃。避开整点 + 多给冗余时段，
+  #     丢一两个也不影响最终数据落地。
   schedule:
-    - cron: '0 1 * * *'
-    - cron: '30 13,14 * * *'
+    - cron: '7 1 * * *'              # 北京 09:07 —— 兜底补前一天夜里的战报
+    - cron: '7,37 13,14,15 * * *'    # 北京 21:07 / 21:37 / 22:07 / 22:37 / 23:07 / 23:37
+  # 只要改了增量输入文件，立刻跑一次
   push:
     paths:
       - 'zba/auto/feed.json'
+  # 也支持在 Actions 页面手动点「Run workflow」
   workflow_dispatch:
 
+# 多个时间点可能前后脚触发，串行排队，避免两次提交互相撞车
+concurrency:
+  group: zba-data-update
+  cancel-in-progress: false
+
+# 最小权限：只允许写仓库内容（提交 data.json），其余一律不给
 permissions:
   contents: write
 
@@ -17,6 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 检出仓库
+        # 钉死到 commit SHA，防止 v4 标签被移动后引入恶意代码
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: 准备 Python
@@ -26,10 +45,16 @@ jobs:
 
       - name: 生成 data.json
         env:
+          # 唯一必需：在 Settings → Secrets and variables → Actions → Secrets 配 TIXIEBAO_TOKEN
+          # 凭证只经环境变量注入，不落盘、不出现在命令行参数里
           TIXIEBAO_TOKEN: ${{ secrets.TIXIEBAO_TOKEN }}
+          # 备用通道（一般不用）
+          DATA_SOURCE_URL: ${{ vars.DATA_SOURCE_URL }}
+          DATA_SOURCE_METHOD: ${{ vars.DATA_SOURCE_METHOD }}
+          DATA_SOURCE_BODY: ${{ vars.DATA_SOURCE_BODY }}
         run: python zba/auto/update_data.py
 
-      - name: 提交前安全自检
+      - name: 提交前安全自检（防止凭证被写进公开文件）
         env:
           TIXIEBAO_TOKEN: ${{ secrets.TIXIEBAO_TOKEN }}
         run: |
@@ -45,10 +70,10 @@ jobs:
             fi
           done
           if [ "$LEAK" -eq 1 ]; then
-            echo "::error::安全自检失败，已中止提交。"
+            echo "::error::安全自检失败，已中止提交。请检查脚本是否误将 token 写入输出文件。"
             exit 1
           fi
-          echo "安全自检通过"
+          echo "安全自检通过：待提交文件中未出现凭证"
 
       - name: 提交变更
         run: |
