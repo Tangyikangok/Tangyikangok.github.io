@@ -3,7 +3,7 @@
     "title": "浙BA 2026 城市篮球争霸赛",
     "subtitle": "2026 浙江省城市篮球联赛 · 省级争霸赛",
     "season": "第二届",
-    "updatedAt": "2026-11-05 22:41",
+    "updatedAt": "2026-11-06 04:33",
     "source": "浙江省篮协大数据平台（官方接口实时同步）",
     "note": "小组赛 4 组 × 7 队主客场双循环，共 14 轮 168 场；各组前四晋级 16 强"
   },
@@ -228,9 +228,9 @@
         },
         {
           "team": "湖州队",
-          "w": 3,
+          "w": 4,
           "l": 4,
-          "pts": 10,
+          "pts": 12,
           "logo": "https://oss.hzjyty.com/upfile/20260816/640ed9c29a9e4c5aaa68df963b03d141.png?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 5
         },
@@ -245,8 +245,8 @@
         {
           "team": "云和队",
           "w": 0,
-          "l": 7,
-          "pts": 7,
+          "l": 8,
+          "pts": 8,
           "logo": "https://oss.hzjyty.com/upfile/20260811/e3a063a394a44ffe93f0d5ca69b1c27a.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 7
         }
@@ -280,26 +280,26 @@
     },
     {
       "rank": 5,
+      "name": "练张钦",
+      "team": "云和队",
+      "pts": 169
+    },
+    {
+      "rank": 6,
       "name": "周煜航",
       "team": "江山队",
       "pts": 169
     },
     {
-      "rank": 6,
+      "rank": 7,
       "name": "吕升平",
       "team": "临安队",
       "pts": 152
     },
     {
-      "rank": 7,
+      "rank": 8,
       "name": "翁豪泽",
       "team": "普陀队",
-      "pts": 146
-    },
-    {
-      "rank": 8,
-      "name": "练张钦",
-      "team": "云和队",
       "pts": 146
     },
     {
@@ -1490,8 +1490,8 @@
       "home": "云和队",
       "away": "湖州队",
       "group": "D组",
-      "hs": null,
-      "as": null
+      "hs": 72,
+      "as": 83
     },
     {
       "no": 108,
@@ -2172,6 +2172,14 @@
       "away": "宁波队",
       "hs": 88,
       "as": 85,
+      "group": "D组"
+    },
+    {
+      "date": "11-05",
+      "home": "云和队",
+      "away": "湖州队",
+      "hs": 72,
+      "as": 83,
       "group": "D组"
     },
     {
