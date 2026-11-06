@@ -3,7 +3,7 @@
     "title": "浙BA 2026 城市篮球争霸赛",
     "subtitle": "2026 浙江省城市篮球联赛 · 省级争霸赛",
     "season": "第二届",
-    "updatedAt": "2026-11-06 04:33",
+    "updatedAt": "2026-11-06 22:27",
     "source": "浙江省篮协大数据平台（官方接口实时同步）",
     "note": "小组赛 4 组 × 7 队主客场双循环，共 14 轮 168 场；各组前四晋级 16 强"
   },
@@ -13,27 +13,35 @@
       "teams": [
         {
           "team": "杭州队",
-          "w": 6,
+          "w": 7,
           "l": 2,
-          "pts": 14,
+          "pts": 16,
           "logo": "https://oss.hzjyty.com/upfile/20260817/ff9c00a4ecf2461ca12d5f8b1ce65c8a.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 1
         },
         {
           "team": "台州队",
-          "w": 5,
+          "w": 6,
           "l": 2,
-          "pts": 12,
+          "pts": 14,
           "logo": "https://oss.hzjyty.com/upfile/20260818/b5e7d822bd354a9daca3a701bfdd8184.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 2
         },
         {
+          "team": "安吉队",
+          "w": 5,
+          "l": 3,
+          "pts": 13,
+          "logo": "https://oss.hzjyty.com/upfile/20260816/437777948a054f0a804b0711f9964c9a.png?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
+          "rank": 3
+        },
+        {
           "team": "余姚队",
           "w": 4,
-          "l": 4,
-          "pts": 12,
+          "l": 5,
+          "pts": 13,
           "logo": "https://oss.hzjyty.com/upfile/20260831/4c654fea05044cf4a9747d47603b3af0.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
-          "rank": 3
+          "rank": 4
         },
         {
           "team": "江山队",
@@ -41,29 +49,21 @@
           "l": 4,
           "pts": 12,
           "logo": "https://oss.hzjyty.com/upfile/20260831/8204295fa9284973b1a1b47badfda0c4.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
-          "rank": 4
-        },
-        {
-          "team": "安吉队",
-          "w": 4,
-          "l": 3,
-          "pts": 11,
-          "logo": "https://oss.hzjyty.com/upfile/20260816/437777948a054f0a804b0711f9964c9a.png?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 5
         },
         {
           "team": "普陀队",
           "w": 3,
-          "l": 5,
-          "pts": 11,
+          "l": 6,
+          "pts": 12,
           "logo": "https://oss.hzjyty.com/upfile/20260812/0d3d1a3a3a484bb9a1cd3b4bd7b6ba7a.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 6
         },
         {
           "team": "桐乡队",
           "w": 1,
-          "l": 7,
-          "pts": 9,
+          "l": 8,
+          "pts": 10,
           "logo": "https://oss.hzjyty.com/upfile/20260812/537405aa744042efbcb24891a7bd3814.png?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 7
         }
@@ -280,39 +280,39 @@
     },
     {
       "rank": 5,
-      "name": "练张钦",
-      "team": "云和队",
-      "pts": 169
-    },
-    {
-      "rank": 6,
       "name": "周煜航",
       "team": "江山队",
       "pts": 169
     },
     {
+      "rank": 6,
+      "name": "练张钦",
+      "team": "云和队",
+      "pts": 169
+    },
+    {
       "rank": 7,
-      "name": "吕升平",
-      "team": "临安队",
-      "pts": 152
+      "name": "刘卓",
+      "team": "安吉队",
+      "pts": 164
     },
     {
       "rank": 8,
       "name": "翁豪泽",
       "team": "普陀队",
-      "pts": 146
+      "pts": 164
     },
     {
       "rank": 9,
-      "name": "刘卓",
-      "team": "安吉队",
-      "pts": 137
+      "name": "吕升平",
+      "team": "临安队",
+      "pts": 152
     },
     {
       "rank": 10,
       "name": "徐梓凯",
       "team": "台州队",
-      "pts": 135
+      "pts": 145
     }
   ],
   "schedule": [
@@ -1512,8 +1512,8 @@
       "home": "安吉队",
       "away": "普陀队",
       "group": "A组",
-      "hs": null,
-      "as": null
+      "hs": 76,
+      "as": 60
     },
     {
       "no": 110,
@@ -1523,8 +1523,8 @@
       "home": "余姚队",
       "away": "杭州队",
       "group": "A组",
-      "hs": null,
-      "as": null
+      "hs": 67,
+      "as": 84
     },
     {
       "no": 111,
@@ -1534,8 +1534,8 @@
       "home": "桐乡队",
       "away": "台州队",
       "group": "A组",
-      "hs": null,
-      "as": null
+      "hs": 61,
+      "as": 102
     },
     {
       "no": 112,
@@ -2166,6 +2166,30 @@
     }
   ],
   "results": [
+    {
+      "date": "11-06",
+      "home": "桐乡队",
+      "away": "台州队",
+      "hs": 61,
+      "as": 102,
+      "group": "A组"
+    },
+    {
+      "date": "11-06",
+      "home": "余姚队",
+      "away": "杭州队",
+      "hs": 67,
+      "as": 84,
+      "group": "A组"
+    },
+    {
+      "date": "11-06",
+      "home": "安吉队",
+      "away": "普陀队",
+      "hs": 76,
+      "as": 60,
+      "group": "A组"
+    },
     {
       "date": "11-05",
       "home": "义乌队",
