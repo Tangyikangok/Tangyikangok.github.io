@@ -173,15 +173,19 @@ def main():
         try:
             sys.path.insert(0, str(Path(__file__).resolve().parent))
             from sync_tixiebao import build as tixiebao_build
-            fresh = tixiebao_build(tixiebao_token)
+            # 传入现有 data.json 作为基线：赛程接口故障时页面不回退、不丢历史
+            fresh = tixiebao_build(tixiebao_token, base=data)
             # 保留本地 meta 的自定义文字（若用户改过标题）
             for k in ("title", "subtitle", "season", "note"):
                 if data.get("meta", {}).get(k):
                     fresh["meta"][k] = data["meta"][k]
+            mode = fresh.get("meta", {}).get("syncMode", "-")
             data = fresh
             tixiebao_ok = True
-            print("[体协宝] 官方接口全量同步成功：%d 组 / %d 场赛程 / %d 条赛果" % (
-                len(data["groups"]), len(data["schedule"]), len(data["results"])))
+            print("[体协宝] 官方接口同步成功（模式：%s）：%d 组 / %d 场赛程 / %d 条赛果" % (
+                mode, len(data["groups"]), len(data["schedule"]), len(data["results"])))
+            if mode == "base":
+                print("[体协宝] 警告：赛程接口本次完全不可用，比分沿用本地基线，仅积分榜/球员榜已更新")
         except Exception as e:
             print("[体协宝] 官方接口同步失败，降级到本地基线：%s" % e)
 
