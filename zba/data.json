@@ -3,7 +3,7 @@
     "title": "浙BA 2026 城市篮球争霸赛",
     "subtitle": "2026 浙江省城市篮球联赛 · 省级争霸赛",
     "season": "第二届",
-    "updatedAt": "2026-11-11 15:41",
+    "updatedAt": "2026-11-11 22:27",
     "source": "浙江省篮协大数据平台（官方接口实时同步）",
     "note": "小组赛 4 组 × 7 队主客场双循环，共 14 轮 168 场；各组前四晋级 16 强",
     "syncMode": "full"
@@ -15,32 +15,32 @@
         {
           "team": "杭州队",
           "w": 7,
-          "l": 2,
-          "pts": 16,
+          "l": 3,
+          "pts": 17,
           "logo": "https://oss.hzjyty.com/upfile/20260817/ff9c00a4ecf2461ca12d5f8b1ce65c8a.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 1
         },
         {
           "team": "台州队",
-          "w": 6,
+          "w": 7,
           "l": 2,
-          "pts": 14,
+          "pts": 16,
           "logo": "https://oss.hzjyty.com/upfile/20260818/b5e7d822bd354a9daca3a701bfdd8184.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 2
         },
         {
           "team": "安吉队",
-          "w": 5,
+          "w": 6,
           "l": 3,
-          "pts": 13,
+          "pts": 15,
           "logo": "https://oss.hzjyty.com/upfile/20260816/437777948a054f0a804b0711f9964c9a.png?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 3
         },
         {
           "team": "余姚队",
           "w": 4,
-          "l": 5,
-          "pts": 13,
+          "l": 6,
+          "pts": 14,
           "logo": "https://oss.hzjyty.com/upfile/20260831/4c654fea05044cf4a9747d47603b3af0.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 4
         },
@@ -287,33 +287,33 @@
     },
     {
       "rank": 6,
+      "name": "刘卓",
+      "team": "安吉队",
+      "pts": 180
+    },
+    {
+      "rank": 7,
       "name": "周煜航",
       "team": "江山队",
       "pts": 169
     },
     {
-      "rank": 7,
+      "rank": 8,
       "name": "翁豪泽",
       "team": "普陀队",
       "pts": 164
     },
     {
-      "rank": 8,
-      "name": "刘卓",
-      "team": "安吉队",
-      "pts": 164
-    },
-    {
       "rank": 9,
-      "name": "吕升平",
-      "team": "临安队",
-      "pts": 152
+      "name": "徐梓凯",
+      "team": "台州队",
+      "pts": 163
     },
     {
       "rank": 10,
-      "name": "徐梓凯",
-      "team": "台州队",
-      "pts": 145
+      "name": "徐启超",
+      "team": "余姚队",
+      "pts": 155
     }
   ],
   "schedule": [
@@ -1645,8 +1645,8 @@
       "home": "台州队",
       "away": "余姚队",
       "group": "A组",
-      "hs": null,
-      "as": null
+      "hs": 90,
+      "as": 61
     },
     {
       "no": 122,
@@ -1656,8 +1656,8 @@
       "home": "杭州队",
       "away": "安吉队",
       "group": "A组",
-      "hs": null,
-      "as": null
+      "hs": 68,
+      "as": 76
     },
     {
       "no": 123,
@@ -2167,6 +2167,22 @@
     }
   ],
   "results": [
+    {
+      "date": "11-11",
+      "home": "杭州队",
+      "away": "安吉队",
+      "hs": 68,
+      "as": 76,
+      "group": "A组"
+    },
+    {
+      "date": "11-11",
+      "home": "台州队",
+      "away": "余姚队",
+      "hs": 90,
+      "as": 61,
+      "group": "A组"
+    },
     {
       "date": "11-09",
       "home": "嘉兴队",
