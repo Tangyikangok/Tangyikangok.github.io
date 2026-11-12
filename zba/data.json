@@ -3,7 +3,7 @@
     "title": "浙BA 2026 城市篮球争霸赛",
     "subtitle": "2026 浙江省城市篮球联赛 · 省级争霸赛",
     "season": "第二届",
-    "updatedAt": "2026-11-12 16:10",
+    "updatedAt": "2026-11-12 22:27",
     "source": "浙江省篮协大数据平台（官方接口实时同步）",
     "note": "小组赛 4 组 × 7 队主客场双循环，共 14 轮 168 场；各组前四晋级 16 强",
     "syncMode": "full"
@@ -37,26 +37,26 @@
           "rank": 3
         },
         {
+          "team": "江山队",
+          "w": 5,
+          "l": 4,
+          "pts": 14,
+          "logo": "https://oss.hzjyty.com/upfile/20260831/8204295fa9284973b1a1b47badfda0c4.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
+          "rank": 4
+        },
+        {
           "team": "余姚队",
           "w": 4,
           "l": 6,
           "pts": 14,
           "logo": "https://oss.hzjyty.com/upfile/20260831/4c654fea05044cf4a9747d47603b3af0.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
-          "rank": 4
-        },
-        {
-          "team": "江山队",
-          "w": 4,
-          "l": 4,
-          "pts": 12,
-          "logo": "https://oss.hzjyty.com/upfile/20260831/8204295fa9284973b1a1b47badfda0c4.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 5
         },
         {
           "team": "普陀队",
           "w": 3,
-          "l": 6,
-          "pts": 12,
+          "l": 7,
+          "pts": 13,
           "logo": "https://oss.hzjyty.com/upfile/20260812/0d3d1a3a3a484bb9a1cd3b4bd7b6ba7a.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 6
         },
@@ -82,19 +82,19 @@
           "rank": 1
         },
         {
+          "team": "永康队",
+          "w": 7,
+          "l": 2,
+          "pts": 16,
+          "logo": "https://oss.hzjyty.com/upfile/20260831/8491ae431c3843b99dc2083c7b27bd35.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
+          "rank": 2
+        },
+        {
           "team": "瑞安队",
           "w": 6,
           "l": 2,
           "pts": 14,
           "logo": "https://oss.hzjyty.com/upfile/20260811/24d22d90fb3741b8bb393114d9afac47.PNG?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
-          "rank": 2
-        },
-        {
-          "team": "永康队",
-          "w": 6,
-          "l": 2,
-          "pts": 14,
-          "logo": "https://oss.hzjyty.com/upfile/20260831/8491ae431c3843b99dc2083c7b27bd35.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 3
         },
         {
@@ -116,8 +116,8 @@
         {
           "team": "舟山队",
           "w": 1,
-          "l": 8,
-          "pts": 10,
+          "l": 9,
+          "pts": 11,
           "logo": "https://oss.hzjyty.com/upfile/20260811/452a74455a7d4d698065eecf063c1638.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 6
         },
@@ -287,21 +287,21 @@
     },
     {
       "rank": 6,
+      "name": "周煜航",
+      "team": "江山队",
+      "pts": 187
+    },
+    {
+      "rank": 7,
       "name": "刘卓",
       "team": "安吉队",
       "pts": 180
     },
     {
-      "rank": 7,
-      "name": "周煜航",
-      "team": "江山队",
-      "pts": 169
-    },
-    {
       "rank": 8,
       "name": "翁豪泽",
       "team": "普陀队",
-      "pts": 164
+      "pts": 176
     },
     {
       "rank": 9,
@@ -1667,8 +1667,8 @@
       "home": "普陀队",
       "away": "江山队",
       "group": "A组",
-      "hs": null,
-      "as": null
+      "hs": 77,
+      "as": 79
     },
     {
       "no": 124,
@@ -1678,8 +1678,8 @@
       "home": "永康队",
       "away": "舟山队",
       "group": "B组",
-      "hs": null,
-      "as": null
+      "hs": 86,
+      "as": 67
     },
     {
       "no": 125,
@@ -2167,6 +2167,22 @@
     }
   ],
   "results": [
+    {
+      "date": "11-12",
+      "home": "永康队",
+      "away": "舟山队",
+      "hs": 86,
+      "as": 67,
+      "group": "B组"
+    },
+    {
+      "date": "11-12",
+      "home": "普陀队",
+      "away": "江山队",
+      "hs": 77,
+      "as": 79,
+      "group": "A组"
+    },
     {
       "date": "11-11",
       "home": "杭州队",
