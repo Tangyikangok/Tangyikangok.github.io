@@ -371,9 +371,9 @@
     }
     const foot = document.getElementById('footNote');
     if (foot) {
-      foot.textContent = (state.source ? '数据来源：' + state.source : '') +
+      foot.textContent = '数据来源：综合事务部' +
         (ts ? ' · 最近同步 ' + fmtTime(ts) : '') +
-        ' · 若与考勤记录不一致，请以人事部门核对结果为准';
+        ' · 若与考勤记录不一致，请以综合事务部核对结果为准';
     }
   }
 
