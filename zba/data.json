@@ -3,7 +3,7 @@
     "title": "浙BA 2026 城市篮球争霸赛",
     "subtitle": "2026 浙江省城市篮球联赛 · 省级争霸赛",
     "season": "第二届",
-    "updatedAt": "2026-11-24 18:49",
+    "updatedAt": "2026-11-24 22:27",
     "source": "浙江省篮协大数据平台（官方接口实时同步）",
     "note": "小组赛 4 组 × 7 队主客场双循环，共 14 轮 168 场；各组前四晋级 16 强",
     "syncMode": "full"
@@ -136,11 +136,19 @@
       "teams": [
         {
           "team": "温州队",
+          "w": 9,
+          "l": 3,
+          "pts": 21,
+          "logo": "https://oss.hzjyty.com/upfile/20260818/04f3ceea08f544be919136f120186139.png?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
+          "rank": 1
+        },
+        {
+          "team": "金华队",
           "w": 8,
           "l": 3,
           "pts": 19,
-          "logo": "https://oss.hzjyty.com/upfile/20260818/04f3ceea08f544be919136f120186139.png?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
-          "rank": 1
+          "logo": "https://oss.hzjyty.com/upfile/20260831/f9b2c44d06ce4116b6eb505ff6f06f58.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
+          "rank": 2
         },
         {
           "team": "宁海队",
@@ -148,14 +156,6 @@
           "l": 2,
           "pts": 18,
           "logo": "https://oss.hzjyty.com/upfile/20260831/26e16b1f9fcf431fb84806c431d86a5d.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
-          "rank": 2
-        },
-        {
-          "team": "金华队",
-          "w": 7,
-          "l": 3,
-          "pts": 17,
-          "logo": "https://oss.hzjyty.com/upfile/20260831/f9b2c44d06ce4116b6eb505ff6f06f58.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 3
         },
         {
@@ -177,16 +177,16 @@
         {
           "team": "玉环队",
           "w": 2,
-          "l": 8,
-          "pts": 12,
+          "l": 9,
+          "pts": 13,
           "logo": "https://oss.hzjyty.com/upfile/20260814/20e7c1d9c9d7461ab136a326d3c32ba1.png?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 6
         },
         {
           "team": "海宁队",
           "w": 1,
-          "l": 9,
-          "pts": 11,
+          "l": 10,
+          "pts": 12,
           "logo": "https://oss.hzjyty.com/upfile/20260814/bc31a24e88914881938c9e925ef0bb79.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 7
         }
@@ -265,13 +265,13 @@
       "rank": 2,
       "name": "颜谋植",
       "team": "温州队",
-      "pts": 276
+      "pts": 282
     },
     {
       "rank": 3,
       "name": "李聪聪",
       "team": "海宁队",
-      "pts": 221
+      "pts": 247
     },
     {
       "rank": 4,
@@ -1909,8 +1909,8 @@
       "home": "温州队",
       "away": "海宁队",
       "group": "C组",
-      "hs": null,
-      "as": null
+      "hs": 106,
+      "as": 70
     },
     {
       "no": 146,
@@ -1920,8 +1920,8 @@
       "home": "金华队",
       "away": "玉环队",
       "group": "C组",
-      "hs": null,
-      "as": null
+      "hs": 90,
+      "as": 79
     },
     {
       "no": 147,
@@ -2167,6 +2167,22 @@
     }
   ],
   "results": [
+    {
+      "date": "11-24",
+      "home": "金华队",
+      "away": "玉环队",
+      "hs": 90,
+      "as": 79,
+      "group": "C组"
+    },
+    {
+      "date": "11-24",
+      "home": "温州队",
+      "away": "海宁队",
+      "hs": 106,
+      "as": 70,
+      "group": "C组"
+    },
     {
       "date": "11-22",
       "home": "余姚队",
