@@ -3,7 +3,7 @@
     "title": "浙BA 2026 城市篮球争霸赛",
     "subtitle": "2026 浙江省城市篮球联赛 · 省级争霸赛",
     "season": "第二届",
-    "updatedAt": "2026-11-26 17:21",
+    "updatedAt": "2026-11-26 22:27",
     "source": "浙江省篮协大数据平台（官方接口实时同步）",
     "note": "小组赛 4 组 × 7 队主客场双循环，共 14 轮 168 场；各组前四晋级 16 强",
     "syncMode": "full"
@@ -22,19 +22,27 @@
         },
         {
           "team": "台州队",
-          "w": 8,
+          "w": 9,
           "l": 2,
-          "pts": 18,
+          "pts": 20,
           "logo": "https://oss.hzjyty.com/upfile/20260818/b5e7d822bd354a9daca3a701bfdd8184.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 2
         },
         {
           "team": "安吉队",
-          "w": 6,
+          "w": 7,
           "l": 4,
-          "pts": 16,
+          "pts": 18,
           "logo": "https://oss.hzjyty.com/upfile/20260816/437777948a054f0a804b0711f9964c9a.png?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 3
+        },
+        {
+          "team": "江山队",
+          "w": 5,
+          "l": 6,
+          "pts": 16,
+          "logo": "https://oss.hzjyty.com/upfile/20260831/8204295fa9284973b1a1b47badfda0c4.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
+          "rank": 4
         },
         {
           "team": "余姚队",
@@ -42,14 +50,6 @@
           "l": 6,
           "pts": 16,
           "logo": "https://oss.hzjyty.com/upfile/20260831/4c654fea05044cf4a9747d47603b3af0.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
-          "rank": 4
-        },
-        {
-          "team": "江山队",
-          "w": 5,
-          "l": 5,
-          "pts": 15,
-          "logo": "https://oss.hzjyty.com/upfile/20260831/8204295fa9284973b1a1b47badfda0c4.jpg?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 5
         },
         {
@@ -63,8 +63,8 @@
         {
           "team": "桐乡队",
           "w": 1,
-          "l": 9,
-          "pts": 11,
+          "l": 10,
+          "pts": 12,
           "logo": "https://oss.hzjyty.com/upfile/20260812/537405aa744042efbcb24891a7bd3814.png?x-oss-process=image/interlace,1/resize,m_lfit,w_800,h_800/format,webp",
           "rank": 7
         }
@@ -275,45 +275,45 @@
     },
     {
       "rank": 4,
+      "name": "周煜航",
+      "team": "江山队",
+      "pts": 223
+    },
+    {
+      "rank": 5,
+      "name": "刘卓",
+      "team": "安吉队",
+      "pts": 221
+    },
+    {
+      "rank": 6,
       "name": "练张钦",
       "team": "云和队",
       "pts": 213
     },
     {
-      "rank": 5,
+      "rank": 7,
       "name": "金子淏",
       "team": "临海队",
       "pts": 209
     },
     {
-      "rank": 6,
-      "name": "周煜航",
-      "team": "江山队",
-      "pts": 207
-    },
-    {
-      "rank": 7,
+      "rank": 8,
       "name": "吕升平",
       "team": "临安队",
       "pts": 200
     },
     {
-      "rank": 8,
-      "name": "翁豪泽",
-      "team": "普陀队",
-      "pts": 195
-    },
-    {
       "rank": 9,
-      "name": "刘卓",
-      "team": "安吉队",
-      "pts": 192
+      "name": "徐梓凯",
+      "team": "台州队",
+      "pts": 199
     },
     {
       "rank": 10,
-      "name": "陈允龙",
-      "team": "苍南队",
-      "pts": 188
+      "name": "翁豪泽",
+      "team": "普陀队",
+      "pts": 195
     }
   ],
   "schedule": [
@@ -1953,8 +1953,8 @@
       "home": "桐乡队",
       "away": "安吉队",
       "group": "A组",
-      "hs": null,
-      "as": null
+      "hs": 74,
+      "as": 77
     },
     {
       "no": 150,
@@ -1964,8 +1964,8 @@
       "home": "台州队",
       "away": "江山队",
       "group": "A组",
-      "hs": null,
-      "as": null
+      "hs": 84,
+      "as": 67
     },
     {
       "no": 151,
@@ -2167,6 +2167,22 @@
     }
   ],
   "results": [
+    {
+      "date": "11-26",
+      "home": "台州队",
+      "away": "江山队",
+      "hs": 84,
+      "as": 67,
+      "group": "A组"
+    },
+    {
+      "date": "11-26",
+      "home": "桐乡队",
+      "away": "安吉队",
+      "hs": 74,
+      "as": 77,
+      "group": "A组"
+    },
     {
       "date": "11-25",
       "home": "杭州队",
